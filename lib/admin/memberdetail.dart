@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farmers_app/admin/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,6 +37,19 @@ class _UserDetailState extends State<MemberDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text("User Details"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(child: Icon(Icons.edit),onTap: (){
+              print(data['email']);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfilePage(data['email'])),
+              );
+            },),
+          )
+        ],
       ),
       body: data == null || data == ""
           ? Center(
@@ -113,17 +127,7 @@ class _UserDetailState extends State<MemberDetail> {
               style: TextStyle(fontSize: 18.0),
             ),
           ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Hourly Rate",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              data['hourlyrate'],
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
+
           Divider(),
           ListTile(
             title: Text(

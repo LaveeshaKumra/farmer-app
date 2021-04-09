@@ -3,19 +3,23 @@ import 'package:farmers_app/super_admin/userdetail2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'edittask.dart';
+
 class TaskDetailsInAdmin extends StatefulWidget {
-  var data;
-  TaskDetailsInAdmin(d) {
+  var data,id;
+  TaskDetailsInAdmin(d,i) {
     this.data = d;
+    this.id=i;
   }
   @override
-  _TaskDetailsState createState() => _TaskDetailsState(this.data);
+  _TaskDetailsState createState() => _TaskDetailsState(this.data,this.id);
 }
 
 class _TaskDetailsState extends State<TaskDetailsInAdmin> {
-  var data,manager,user;
-  _TaskDetailsState(d) {
+  var data,manager,user,docid;
+  _TaskDetailsState(d,i) {
     this.data = d;
+    this.docid=i;
     _getmanager(data['assigned_by']);
     _getuser(data['assigned_to']);
   }
@@ -47,11 +51,16 @@ class _TaskDetailsState extends State<TaskDetailsInAdmin> {
   }
 
   _gotoedittask(){
-
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditTask(data,docid)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Stream documentStream = FirebaseFirestore.instance.collection('tasks').doc(docid).snapshots();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Task Details"),
@@ -64,124 +73,169 @@ class _TaskDetailsState extends State<TaskDetailsInAdmin> {
           },),
         ],
       ),
-      body: data == null || data == ""
-          ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              child: CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).primaryColor)),
-              width: 30,
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text("Loading.."),
-            )
-          ],
-        ),
-      )
-          : ListView(
-        children: <Widget>[
+      body: StreamBuilder(
+        stream: documentStream,
+        builder: (BuildContext context,  snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
 
-          SizedBox(height: 20,),
-          ListTile(
-            title: Text(
-              "Task Title",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              data['title'],
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Task Description",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              data['description'],
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Company",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              data['company'],
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Starting Date",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              _convertdate(data['start_date'].toDate()),
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Ending Date",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              _convertdate(data['end_date'].toDate()),
-              style: TextStyle(fontSize: 18.0),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Assigned By",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              manager!=null?manager:"",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            // trailing: InkWell(child: Icon(Icons.remove_red_eye),onTap: (){
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => UserDetail2(data['assigned_by'])),
-            //   );
-            // },),
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Assigned To",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
-            ),
-            subtitle: Text(
-              user!=null?user:"",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            trailing: InkWell(child: Icon(Icons.remove_red_eye),onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserDetail2(data['assigned_to'])),
-              );
-            },),
-          ),
-          Divider(),
-          SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor)),
+                    width: 30,
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text("Loading.."),
+                  )
+                ],
+              ),
+            );
+          }
+
+          return new ListView(
+            children: <Widget>[
+
+              SizedBox(height: 20,),
+              ListTile(
+                title: Text(
+                  "Task Title",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['title'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Task Description",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['description'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Company",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['company'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Task Status",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['status'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Starting Date",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  _convertdate(snapshot.data['start_date'].toDate()),
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+
+              ListTile(
+                title: Text(
+                  "Starting Time",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['start_time'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Ending Date",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  _convertdate(snapshot.data['end_date'].toDate()),
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Ending Time",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['end_time'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Assigned By",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  manager!=null?manager:"",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                // trailing: InkWell(child: Icon(Icons.remove_red_eye),onTap: (){
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => UserDetail2(data['assigned_by'])),
+                //   );
+                // },),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
+                  "Assigned To",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  user!=null?user:"",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                trailing: InkWell(child: Icon(Icons.remove_red_eye),onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserDetail2(snapshot.data['assigned_to'])),
+                  );
+                },),
+              ),
+              Divider(),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          );
+        },
+      )
 
     );
   }

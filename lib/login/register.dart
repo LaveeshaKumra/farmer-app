@@ -23,7 +23,6 @@ class _RegisterState extends State<Register> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _hourlyrate = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _companyid = TextEditingController();
   //final TextEditingController _mobileno = TextEditingController();
@@ -76,7 +75,6 @@ print(_mobileno);
           'dateofbirth':_selectedDate,
           'address':_address.text,
           'company':_companyid.text,
-          'hourlyrate':_hourlyrate.text,
           'role':jobtitle,
           'status':'Pending'
 
@@ -374,7 +372,7 @@ formOneBuilder(BuildContext context) {
                   SizedBox(height: 30,),
                   Container(
                     child: RoundedButton(
-                      text: "Next",
+                      text: "Update Data",
                       state: false,
                       press: () {
                         if (_formKey1.currentState.validate()) {
@@ -463,29 +461,7 @@ formOneBuilder(BuildContext context) {
                         ),
                       ),
 
-                      SizedBox(
-                        height: 20,
-                      ),Material(
-                        color: Colors.grey[200],
-                        elevation: 2.0,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        child: TextFormField(
-                          controller: _hourlyrate,
-                          validator: (var value) {
-                            if (value.isEmpty) {
-                              return 'Please enter hourly rate';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.numberWithOptions(decimal: true,signed: false),
-                          cursorColor: Colors.teal,
-                          decoration: InputDecoration(
-                              hintText: "Hourly rate",
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 13)),
-                        ),
-                      ),
+
                       SizedBox(
                         height: 20,
                       ),

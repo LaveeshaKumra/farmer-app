@@ -31,24 +31,24 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.people_alt),
         title: ("Teams"),
-        activeColor: Colors.teal,
-        activeColorAlternate: Colors.white,
-        inactiveColor: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.teal,
+        activeColorSecondary: Colors.white,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
 
       PersistentBottomNavBarItem(
         icon: Icon(Icons.person_add_rounded),
         title: ("Requests"),
-        activeColor: Colors.teal,
-        activeColorAlternate: Colors.white,
-        inactiveColor: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.teal,
+        activeColorSecondary: Colors.white,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.grading_rounded),
         title: ("Tasks"),
-        activeColor: Colors.teal,
-        activeColorAlternate: Colors.white,
-        inactiveColor: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.teal,
+        activeColorSecondary: Colors.white,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];
   }

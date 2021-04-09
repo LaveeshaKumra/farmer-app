@@ -24,7 +24,7 @@ class _AllTasksState extends State<AllTasks> {
   _getalltasks() async {
     var val;
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("tasks").get().then(
+    await databaseReference.collection("tasks").orderBy('start_date',descending: true).get().then(
             (value) {val = value;
         });
     return val;
@@ -63,7 +63,7 @@ class _AllTasksState extends State<AllTasks> {
                               leading: Icon(Icons.grading_rounded),
                               title: Text(d[index]['title']),
                               subtitle: Text(d[index]['company']),
-                              //trailing: Text(d[index].data['role']),
+                              trailing: Text(d[index]['status']),
                             ),
                             onTap: (){
                               Route route =MaterialPageRoute(builder: (context) => TaskDetails(d[index]));

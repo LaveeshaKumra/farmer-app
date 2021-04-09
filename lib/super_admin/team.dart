@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farmers_app/login/login.dart';
-import 'package:farmers_app/super_admin/super_admin_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 import 'allusers.dart';

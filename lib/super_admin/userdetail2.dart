@@ -102,17 +102,7 @@ class _UserDetailState2 extends State<UserDetail2> {
                           style: TextStyle(fontSize: 18.0),
                         ),
                       ),
-                      Divider(),
-                      ListTile(
-                        title: Text(
-                          "Hourly Rate",
-                          style: TextStyle(color: Colors.teal, fontSize: 12.0),
-                        ),
-                        subtitle: Text(
-                          d['hourlyrate'],
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
+
                       Divider(),
                       ListTile(
                         title: Text(

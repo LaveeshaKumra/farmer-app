@@ -169,17 +169,6 @@ class _UserState extends State<User> {
                 Divider(),
                 ListTile(
                   title: Text(
-                    "Hourly Rate",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
-                  ),
-                  subtitle: Text(
-                    data['hourlyrate'],
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text(
                     "Gender",
                     style: TextStyle(color: Colors.teal, fontSize: 12.0),
                   ),

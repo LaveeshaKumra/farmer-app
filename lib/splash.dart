@@ -64,7 +64,7 @@ class _SplashState extends State<Splash> {
           'email', isEqualTo: user.email).get().then((val) async {
         if (val.docs.isNotEmpty) {
           if (val.docs[0]['role'] == "admin") {
-            if(val.docs[0]['status']=="Approved"){
+            if(val.docs[0]['status']=="Accepted"){
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => AdminPage()),
@@ -83,7 +83,7 @@ class _SplashState extends State<Splash> {
                     builder: (BuildContext context) => SuperAdminHome()));
           }
           else {
-            if(val.docs[0]['status']=="Approved"){
+            if(val.docs[0]['status']=="Accepted"){
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => MyHomePage()),

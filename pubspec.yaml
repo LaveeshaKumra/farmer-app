@@ -9,10 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  searchable_dropdown:
   shared_preferences: ^2.0.5
   flutter_statusbarcolor: ^0.2.3
-  timeago:
   intl_phone_field: ^1.4.2
   cloud_firestore: ^1.0.1
   firebase_core: ^1.0.1
@@ -20,6 +19,14 @@ dependencies:
   firebase_messaging:
   toast:
   persistent_bottom_nav_bar: ^3.1.0
+  http:
+  charts_flutter:
+  async:
+  grouped_list: ^4.0.0
+  awesome_dialog:
+  flutter_calendar_carousel: ^2.0.0
+
+
 
 
 
@@ -38,3 +45,4 @@ flutter:
     - assets/others.png
     - assets/female.png
     - assets/male.png
+    - assets/icons/
