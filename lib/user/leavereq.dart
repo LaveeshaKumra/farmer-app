@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'calendar2.dart';
 import 'requestdetail.dart';
 import 'newreq.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,20 @@ class _PastReqState extends State<PastReq> {
     return Scaffold(
       appBar: AppBar(
         title: Text("All Leave Request"),
+        actions: [
+          GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.calendar_today_rounded),
+            ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Calendar2()),
+              );
+            },
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 5,

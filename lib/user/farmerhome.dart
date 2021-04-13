@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/super_admin/taskdetails.dart';
+import 'package:farmers_app/user/attendance.dart';
+import 'package:farmers_app/user/graph.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +16,19 @@ class HomePageFarmer extends StatefulWidget {
 
 class _HomePageFarmerState extends State<HomePageFarmer> {
   var email,company,name;
-  DateTime _choosedate;
-  //d1,d2;
+  DateTime _choosedate=DateTime.now();
+
   _HomePageFarmerState() {
     _getUser();
-    DateTime _choosedate=DateTime.now();
-    // d1=new DateTime(_choosedate.year,_choosedate.month,_choosedate.day,0,0,0,0,0);
-    // d2=new DateTime(_choosedate.year,_choosedate.month,_choosedate.day,23,59,59,0,0);
+
 
   }
   var firebase = FirebaseAuth.instance;
-  TextEditingController _textEditingController = TextEditingController();
 
   _selectDate(BuildContext context) async {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
-        initialDate: _choosedate != null ? _choosedate : DateTime.now(),
+        initialDate:  DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2040),
         builder: (BuildContext context, Widget child) {
@@ -50,8 +49,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
     if (newSelectedDate != null) {
       setState(() {
         _choosedate = newSelectedDate;
-        // d1=new DateTime(_choosedate.year,_choosedate.month,_choosedate.day,0,0,0,0,0);
-        // d2=new DateTime(_choosedate.year,_choosedate.month,_choosedate.day,23,59,59,0,0);
+        print('inside function $_choosedate');
       });
     }
   }
@@ -129,53 +127,24 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                     Row(
                       children: [
                         Text(
-                          "Your Today's Schedule",
+                          "Upcoming Tasks",
                           style: TextStyle(color: Colors.black26, fontSize: 18),
                         )
                       ],
                     ),
-                    // Container(
-                    //   height: MediaQuery.of(context).size.height * 0.03,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       "Start Time ",
-                    //       style: TextStyle(
-                    //         color: Colors.black,
-                    //       ),
-                    //     ),
-                    //     Container(
-                    //       width: MediaQuery.of(context).size.width * 0.05,
-                    //       child: Text(" --"),
-                    //     ),
-                    //     Text(
-                    //       "End Time",
-                    //       style: TextStyle(
-                    //         color: Colors.black,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // Container(
-                    //   height: MediaQuery.of(context).size.height * 0.03,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       "Service Name",
-                    //       style: TextStyle(color: Colors.black, fontSize: 16),
-                    //     )
-                    //   ],
-                    // ),
-
                     Flexible(
                       child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection("tasks").where("assigned_to",isEqualTo: email).where("start_date",isGreaterThanOrEqualTo: _choosedate).snapshots(),
+                        stream: FirebaseFirestore.instance.collection("tasks").where("assigned_to",isEqualTo: email).where('end_date',isGreaterThanOrEqualTo: _choosedate).snapshots(),
                         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return Center(child: Text('Something went wrong'));
                           }
+    //                       List<DocumentSnapshot> snapshotfilter;
+    //                       snapshot.data.docs.map((DocumentSnapshot d){
+    // if (d.data()['end_date'].toDate().isBefore(_choosedate) && d.data()['start_date'].toDate().isAfter(_choosedate)){
+    //   snapshotfilter.add(d.data());
+    // }
+    //                       });
 
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return Center(
@@ -207,13 +176,32 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                           }
                           return new ListView(
                             children: snapshot.data.docs.map((DocumentSnapshot document) {
+                             //  print(_choosedate);
+                             //  print(document.data()['end_date'].toDate());
+                             //  print(document.data()['end_date'].toDate().isBefore(_choosedate));
+                             // // if (document.data()['end_date'].toDate().isBefore(_choosedate) && document.data()['start_date'].toDate().isAfter(_choosedate)){
+                             //    return Container(
+                             //        child:(document.data()['end_date'].toDate().isAfter(_choosedate) && document.data()['start_date'].toDate().isBefore(_choosedate))?
+                             //        Text("Hey"):InkWell(
+                             //  child: ListTile(
+                             //  //leading: Icon(Icons.work_off),
+                             //  trailing: document.data()['status']=="Pending"?Icon(Icons.warning,color: Colors.yellow,):document.data()['status']=="Rejected"?Icon(Icons.cancel_rounded,color: Colors.red,):Icon(Icons.check_circle,color: Colors.green,),
+                             //  title: document.data()['title']==null?Text(''):Text(document.data()['title']),
+                             //  subtitle: Text("From ${_convertdate(document.data()['start_date'].toDate())} to ${_convertdate(document.data()['end_date'].toDate())}"),
+                             //  //trailing: Text(document.data()['company']),
+                             //  ),
+                             //  onTap: (){
+                             //  Navigator.push(
+                             //  context,
+                             //  MaterialPageRoute(builder: (context) => TaskDetails(document.data())),
+                             //  );
+                             //  },
+                             //  ));
                               return new InkWell(
                                 child: ListTile(
-                                  //leading: Icon(Icons.work_off),
                                   trailing: document.data()['status']=="Pending"?Icon(Icons.warning,color: Colors.yellow,):document.data()['status']=="Rejected"?Icon(Icons.cancel_rounded,color: Colors.red,):Icon(Icons.check_circle,color: Colors.green,),
                                   title: document.data()['title']==null?Text(''):Text(document.data()['title']),
                                   subtitle: Text("From ${_convertdate(document.data()['start_date'].toDate())} to ${_convertdate(document.data()['end_date'].toDate())}"),
-                                  //trailing: Text(document.data()['company']),
                                 ),
                                 onTap: (){
                                   Navigator.push(
@@ -264,20 +252,28 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                           )
                         },
                       ),
-                      Card(
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset("assets/icons/working hours.png",width: 80,),
-                              ),
-                              Text("Working Hours\nReport",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
-                            ],
+                      InkWell(
+                        child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset("assets/icons/working hours.png",width: 80,),
+                                ),
+                                Text("Working Hours\nReport",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
+                              ],
+                            ),
                           ),
                         ),
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ReportPage()),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -287,18 +283,26 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Card(
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image.asset("assets/icons/calendar.png",width: 80,),
-                              ),
-                              Text("Attendance\n",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
-                            ],
+                      InkWell(
+                        onTap:(){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Attendance(email)),
+                  );
+                  },
+                        child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image.asset("assets/icons/calendar.png",width: 80,),
+                                ),
+                                Text("Attendance\n",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
+                              ],
+                            ),
                           ),
                         ),
                       ),

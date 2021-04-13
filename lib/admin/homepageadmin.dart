@@ -33,7 +33,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
   }
 
   _convertdate(d) {
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('dd MMMM , yy');
     final String formatted = formatter.format(d);
     return formatted;
   }
