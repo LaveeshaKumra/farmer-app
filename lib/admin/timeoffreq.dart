@@ -1,41 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:http/http.dart';
+import 'dart:convert';
 import 'addtask.dart';
 
 class TimeOffRequestPage extends StatefulWidget {
-  var data;
-  TimeOffRequestPage(d) {
+  var data,id;
+  TimeOffRequestPage(d,i) {
     this.data = d;
+    this.id=i;
   }
   @override
-  _TimeOffRequestPageState createState() => _TimeOffRequestPageState(this.data);
+  _TimeOffRequestPageState createState() => _TimeOffRequestPageState(this.data,this.id);
 }
 
 class _TimeOffRequestPageState extends State<TimeOffRequestPage> {
-  var data;
-  _TimeOffRequestPageState(d) {
+  var data,id;
+  _TimeOffRequestPageState(d,i) {
     this.data = d;
-    _getid();
+    this.id=i;
   }
   _convertdate(d){
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('dd MMMM yy');
     final String formatted = formatter.format(d);
     return formatted;
   }
-  var docid;
-  _getid() async {
-    final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("timeoff").where('email',isEqualTo: data['email']).get().then((value){setState(() {
-      docid= value.docs[0].id;
-    });});
 
-  }
   _reject() async {
-    print(docid);
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("timeoff").doc(docid).update({'status':'Rejected'}).then((value) {
+    await databaseReference.collection("timeoff").doc(id).update({'status':'Rejected'}).then((value) {
+      _sendnotification('Rejected');
       Navigator.pop(context,true);
     });
 
@@ -43,9 +38,47 @@ class _TimeOffRequestPageState extends State<TimeOffRequestPage> {
 
   _accept() async {
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("timeoff").doc(docid).update({'status':'Accepted'}).then((value) {
+    await databaseReference.collection("timeoff").doc(id).update({'status':'Accepted'}).then((value) {
+      _sendnotification('Approved');
       Navigator.pop(context,true);
     });
+  }
+
+  var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+  _sendnotification(status) async {
+var topic3=data['email'].replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+    try {
+      var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization":
+        "key=$serverToken",
+      };
+      var request = {
+        "notification": {
+          "title": "Your Time Off Request has been $status",
+          "body": 'From ${_convertdate(data['start_date'].toDate())} to ${_convertdate(data['end_date'].toDate())}',
+          "sound": "default",
+          "tag":"New Updates from Rompin"
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "screen": "TimeoffPage",
+        },
+        "priority": "high",
+        "to": '/topics/${topic4}',
+      };
+      var client = new Client();
+      var response =
+      await client.post(url, headers: header, body: json.encode(request));
+      print(response.body);
+      print(response.statusCode);
+      return true;
+    } catch (e, s) {
+      print(e);
+      return false;
+    }
   }
   @override
   Widget build(BuildContext context) {

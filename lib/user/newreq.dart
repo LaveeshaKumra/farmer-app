@@ -3,7 +3,8 @@ import 'package:farmers_app/admin/addtask.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class AddReq extends StatefulWidget {
   var email,company,name;
@@ -46,8 +47,8 @@ class _AddReqState extends State<AddReq> {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _startdate != null ? _startdate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -81,8 +82,8 @@ class _AddReqState extends State<AddReq> {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _enddate != null ? _enddate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -110,6 +111,47 @@ class _AddReqState extends State<AddReq> {
             affinity: TextAffinity.upstream));
     }
   }
+  _convertdate(d){
+    final DateFormat formatter = DateFormat('dd MMMM,yy');
+    final String formatted = formatter.format(d);
+    return formatted;
+  }
+  var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+  _sendnotification() async {
+    var topic='admin$company';
+    var topic2=topic.replaceAll(' ', "");
+    try {
+      var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization":
+        "key=$serverToken",
+      };
+      var request = {
+        "notification": {
+          "title": "New Leave Request from $name",
+          "body": "From ${_convertdate(_startdate)} to ${_convertdate(_enddate)}",
+          "sound": "default",
+          "tag":"New Updates from Rompin"
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "screen": "TimeoffAdmin",
+        },
+        "priority": "high",
+        "to": '/topics/${topic2}',
+      };
+      var client = new Client();
+      var response =
+      await client.post(url, headers: header, body: json.encode(request));
+      print(response.body);
+      print(response.statusCode);
+      return true;
+    } catch (e, s) {
+      print(e);
+      return false;
+    }
+  }
 
   addwork() async {
     setState(() {
@@ -130,6 +172,7 @@ class _AddReqState extends State<AddReq> {
       "status":"Pending"
     }).then((value) async {
       print(value);
+      _sendnotification();
       //await sendAndRetrieveMessage('${list1[i]}-Vrinda');
       setState(() {
         _progress=false;

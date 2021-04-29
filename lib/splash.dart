@@ -42,7 +42,7 @@ class _SplashState extends State<Splash> {
     await databaseReference
         .collection("splash_screen").get().then((querySnapshot) {
       setState(() {
-        imagee = querySnapshot.docs[0]['image'];
+        imagee = querySnapshot.docs[0]['url'];
       });
     });
     return imagee;
@@ -117,7 +117,7 @@ class _SplashState extends State<Splash> {
                     children: <Widget>[
                       //Text("Welcome to app")
                       showData == null && showData == "" ? Text(
-                        "Welcome to <App Name>",
+                        "Welcome to Rompin",
                         style: TextStyle(fontSize: 28),) : Image.network(
                         showData,
                         width: 300,
@@ -134,7 +134,7 @@ class _SplashState extends State<Splash> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text("Welcome to app", style: TextStyle(fontSize: 28),)
+                      Text("Welcome to Rompin", style: TextStyle(fontSize: 28),)
                     ],
                   ),
                 );

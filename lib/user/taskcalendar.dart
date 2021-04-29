@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Calendar2 extends StatefulWidget {
+class TaskCalendar extends StatefulWidget {
   @override
   _Calendar2State createState() => _Calendar2State();
 }
 
-class _Calendar2State extends State<Calendar2> {
+class _Calendar2State extends State<TaskCalendar> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   DateTime _dateTime;
   QuerySnapshot _userEventSnapshot,_userEventSnapshot2;
@@ -23,16 +23,16 @@ class _Calendar2State extends State<Calendar2> {
 
     if (currentUser != null) {
       QuerySnapshot userEvents = await FirebaseFirestore.instance
-          .collection('timeoff')
-          //.where(
-         // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: currentUser.email)
-          .get();
-      QuerySnapshot userEvents2 = await FirebaseFirestore.instance
-          .collection('attendance')
+          .collection('tasks')
       //.where(
       // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: currentUser.email)
+          .where('assigned_to', isEqualTo: currentUser.email)
+          .get();
+      QuerySnapshot userEvents2 = await FirebaseFirestore.instance
+          .collection('tasks')
+      //.where(
+      // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
+          .where('assigned_to', isEqualTo: currentUser.email)
           .get();
       _userEventSnapshot2=userEvents2;
       _userEventSnapshot = userEvents;
@@ -213,7 +213,6 @@ class _Calendar2State extends State<Calendar2> {
                                           child: new Column(
                                             children: <Widget>[
                                               buildDayNumberWidget(dayNumber),
-                                              buildattendancecircle(dayNumber),
                                               buildDayEventInfoWidget(dayNumber)
                                             ],
                                           )));
@@ -233,42 +232,6 @@ class _Calendar2State extends State<Calendar2> {
             }
         )
     );
-  }
-  Widget buildattendancecircle(int dayNumber) {
-    int eventCount = 0;
-    DateTime eventDate,eventDate2;
-
-    _userEventSnapshot2.docs.forEach((doc) {
-      eventDate = doc.data()['in_time'].toDate();
-      eventDate2= doc.data()['out_time'].toDate();
-      if (eventDate != null
-          && eventDate.day <= dayNumber - _beginMonthPadding && eventDate2.day >= dayNumber - _beginMonthPadding
-          && eventDate.month == _dateTime.month
-          && eventDate.year == _dateTime.year) {
-        eventCount++;
-
-      }
-    });
-
-    if (eventCount > 0) {
-      return new Container(
-        width: 10.0,
-        height: 10.0,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
-      );
-    } else {
-      return new Container(
-        width: 10.0,
-        height: 10.0,
-        // decoration: BoxDecoration(
-        //   color: Colors.red,
-        //   shape: BoxShape.circle,
-        // ),
-      );
-    }
   }
 
   Align buildDayNumberWidget(int dayNumber) {
@@ -317,7 +280,7 @@ class _Calendar2State extends State<Calendar2> {
     TimeOfDay time=TimeOfDay(hour: t.hour,minute: t.minute);
     return time;
   }
-   buildDialog(int dayNumber) {
+  buildDialog(int dayNumber) {
     int eventCount = 0;
     DateTime eventDate,eventDate2;
     var eventtitle,eventdesc,eventstatus;
@@ -367,14 +330,14 @@ class _Calendar2State extends State<Calendar2> {
       int eventCount2=0;
       var intime,outtime;
       _userEventSnapshot2.docs.forEach((doc) {
-        eventDate = doc.data()['in_time'].toDate();
+        eventDate = doc.data()['start_date'].toDate();
         if (eventDate != null
             && eventDate.day == dayNumber - _beginMonthPadding
             && eventDate.month == _dateTime.month
             && eventDate.year == _dateTime.year) {
           eventCount2++;
-          intime=doc.data()['in_time'];
-          outtime=doc.data()['out_time'];
+          intime=doc.data()['start_date'];
+          outtime=doc.data()['end_date'];
         }
       });
       if(eventCount2>0){
@@ -543,7 +506,7 @@ class _Calendar2State extends State<Calendar2> {
       case 0:
         break;
       case 1:
-        //Navigator.pushNamed(context, Constants.calContactsRoute);
+      //Navigator.pushNamed(context, Constants.calContactsRoute);
         break;
     }
   }

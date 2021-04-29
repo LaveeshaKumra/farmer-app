@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/profile.dart';
 import 'package:farmers_app/login/login.dart';
+import 'package:farmers_app/user/attendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
+import 'graph.dart';
+import 'rewards.dart';
 import 'alltasks.dart';
 import 'farmerhome.dart';
 import 'leavereq.dart';
@@ -42,7 +45,65 @@ class _MyHomePageState extends State<MyHomePage> {
           image = "assets/female.png";
         });
       }
+      var topic3=email.replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+      FirebaseMessaging.instance.subscribeToTopic(topic4);
     });
+  }
+  void initState() {
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: ListTile(
+            title: Text(message.notification.title),
+            subtitle: Text(message.notification.body),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print(message.data['screen']);
+      print('A new onMessageOpenedApp event was published!');
+      switch (message.data['screen']) {
+        case "Reward":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Rewards(email)),
+          );
+          break;
+        case "TimeoffPage":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PastReq(email,name,company)),
+          );
+          break;
+        case "AllTasks":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AllTasks(email,company)),
+          );
+          break;
+        case "login":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+          break;
+        default:
+          break;
+      }
+    });
+
   }
 
   @override
@@ -50,14 +111,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: NavDrawer(image, company, email,name),
       appBar: AppBar(title: Text("Hello $name"),
-      actions: [
-        InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.add_alert_rounded),
-          ),
-      )
-        ],elevation: 0,),
+      // actions: [
+      //   InkWell(
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(8.0),
+      //       child: Icon(Icons.add_alert_rounded),
+      //     ),
+      // )
+      //   ],
+        elevation: 0,),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.push(
@@ -122,10 +184,13 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   _logout() async {
-    await firebase.signOut().then((value) => {
+    await firebase.signOut().then((value){
+      var topic3=email.replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+    FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-              (Route<dynamic> route) => false),
+              (Route<dynamic> route) => false);
     });
   }
 
@@ -179,22 +244,22 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(Icons.calendar_today_rounded),
             title: Text('Attendance'),
             onTap: () => {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => WorkerRequestsScreen(company)),
-              // )
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Attendance(email,company,name)),
+              )
             },
           ),
           ListTile(
             leading: Icon(Icons.bar_chart),
             title: Text('Working Hours'),
             onTap: () => {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => WorkerRequestsScreen(company)),
-              // )
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ReportPage(email)),
+              )
             },
           ),
           ListTile(
@@ -205,6 +270,17 @@ class _NavDrawerState extends State<NavDrawer> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => PastReq(email,name,company)),
+              )
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.wallet_giftcard_rounded),
+            title: Text('Rewards'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Rewards(email)),
               )
             },
           ),

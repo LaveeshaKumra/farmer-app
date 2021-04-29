@@ -254,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                           alignment: Alignment.center,
                           child: Text(
-                            "Already have Account? Sign Up Here",
+                            "Don't have Account? Sign Up Here",
                           )),
                       onTap: () {
                         _register();

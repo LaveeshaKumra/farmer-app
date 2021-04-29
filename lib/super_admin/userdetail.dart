@@ -19,7 +19,7 @@ class _UserDetailState extends State<UserDetail> {
     _getid();
   }
   _convertdate(d){
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('dd MMMM yy');
     final String formatted = formatter.format(d);
     return formatted;
   }
@@ -42,7 +42,7 @@ class _UserDetailState extends State<UserDetail> {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(child: Icon(Icons.edit),onTap: (){
               print(data['email']);
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => ProfilePage(data['email'])),

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class User extends StatefulWidget {
   var data;
@@ -31,10 +32,47 @@ class _UserState extends State<User> {
     });});
 
   }
+  var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+  _sendnotification(status) async {
+var topic3=data['email'].replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+    try {
+      var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization":
+        "key=$serverToken",
+      };
+      var request = {
+        "notification": {
+          "title": "New Account Request has been $status",
+          "body": 'Login to your Account',
+          "sound": "default",
+          "tag":"New Updates from Rompin"
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "screen": "login",
+        },
+        "priority": "high",
+        "to": '/topics/${topic4}',
+      };
+      var client = new Client();
+      var response =
+      await client.post(url, headers: header, body: json.encode(request));
+      print(response.body);
+      print(response.statusCode);
+      return true;
+    } catch (e, s) {
+      print(e);
+      return false;
+    }
+  }
   _reject() async {
     print(docid);
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("users").doc(docid).update({'status':'Rejected'}).then((value) {
+      _sendnotification('Rejected');
       Navigator.pop(context,true);
     });
 
@@ -43,6 +81,7 @@ class _UserState extends State<User> {
   _accept() async {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("users").doc(docid).update({'status':'Accepted'}).then((value) {
+      _sendnotification('Approved');
       Navigator.pop(context,true);
     });
   }

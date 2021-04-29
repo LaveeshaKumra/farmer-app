@@ -51,7 +51,7 @@ class _TaskDetailsState extends State<TaskDetailsInAdmin> {
   }
 
   _gotoedittask(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => EditTask(data,docid)),
     );

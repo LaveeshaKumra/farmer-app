@@ -20,7 +20,7 @@ class _TaskDetailsState extends State<TaskDetails> {
     _getuser(data['assigned_to']);
   }
   _convertdate(d){
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('dd MMMM , yy');
     final String formatted = formatter.format(d);
     return formatted;
   }
@@ -75,7 +75,6 @@ class _TaskDetailsState extends State<TaskDetails> {
           : ListView(
         children: <Widget>[
 
-          SizedBox(height: 20,),
           ListTile(
             title: Text(
               "Task Title",
@@ -122,11 +121,33 @@ class _TaskDetailsState extends State<TaskDetails> {
           Divider(),
           ListTile(
             title: Text(
+              "Starting Time",
+              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+            ),
+            subtitle: Text(
+              data['start_time'],
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Text(
               "Ending Date",
               style: TextStyle(color: Colors.teal, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['end_date'].toDate()),
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Text(
+              "Starting Time",
+              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+            ),
+            subtitle: Text(
+              data['end_time'],
               style: TextStyle(fontSize: 18.0),
             ),
           ),

@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.teal[800]);
     return MaterialApp(
-      title: 'Flutter Demo',
-
+      title: 'Rompin',
       theme: ThemeData(
           primarySwatch: Colors.teal,
       ),

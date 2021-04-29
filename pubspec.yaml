@@ -18,13 +18,12 @@ dependencies:
   firebase_auth: ^1.0.1
   firebase_messaging:
   toast:
-  persistent_bottom_nav_bar: ^3.1.0
   http:
   charts_flutter:
   async:
   grouped_list: ^4.0.0
   awesome_dialog:
-  flutter_calendar_carousel: ^2.0.0
+  start_chart: ^0.2.0
 
 
 

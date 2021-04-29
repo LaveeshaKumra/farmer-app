@@ -3,6 +3,8 @@ import 'package:farmers_app/admin/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'calendar.dart';
+
 class MemberDetail extends StatefulWidget {
   var data;
   MemberDetail(d) {
@@ -42,7 +44,7 @@ class _UserDetailState extends State<MemberDetail> {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(child: Icon(Icons.edit),onTap: (){
               print(data['email']);
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => ProfilePage(data['email'])),
@@ -50,6 +52,16 @@ class _UserDetailState extends State<MemberDetail> {
             },),
           )
         ],
+      ),
+      floatingActionButton: data['role']=='admin'?Container():FloatingActionButton(
+        child: Icon(Icons.calendar_today),
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Calendar(data['email'])),
+          );
+        },
       ),
       body: data == null || data == ""
           ? Center(

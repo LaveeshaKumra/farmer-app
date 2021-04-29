@@ -16,7 +16,7 @@ class _PastReqState extends State<PastReq> {
   var email,company,name;
   _PastReqState(e,n,c){this.email=e;this.name=n;this.company=c;}
   _convertdate(d){
-    final DateFormat formatter = DateFormat('dd-MM-yyyy');
+    final DateFormat formatter = DateFormat('dd MMMM yy');
     final String formatted = formatter.format(d);
     return formatted;
   }

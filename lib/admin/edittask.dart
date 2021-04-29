@@ -1,9 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:toast/toast.dart';
-
+import 'package:http/http.dart';
+import 'dart:convert';
 import 'addtask.dart';
 
 class EditTask extends StatefulWidget {
@@ -85,48 +87,41 @@ var status;
   }
 }
 
-  //final String serverToken = 'AAAAkgw6AJk:APA91bGRPBagwJydmgRcvUNkr0KHx6jo6GMaJ67NWguNw3fOrMBz--9TC4btXxO1q1_RIxqUXz8VWUm-LRgTaR_WHr-02iCS1Aibtiatk4bxlSRiBg9PL-tDT3udvDnbxyxRA2IhEEr7';
-  //final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-
-  sendAndRetrieveMessage(topic) async {
-    // // var t2=topic.replaceAll('.', "");
-    // // var t3=t2.replaceAll(new RegExp(r"\s+"), "");
-    // //
-    // // await firebaseMessaging.requestNotificationPermissions(
-    // //   const IosNotificationSettings(sound: true, badge: true, alert: true),
-    // // );
-    // try {
-    //   var url = 'https://fcm.googleapis.com/fcm/send';
-    //   var header = {
-    //     "Content-Type": "application/json",
-    //     "Authorization":
-    //     "key=$serverToken",
-    //   };
-    //   var request = {
-    //     "notification": {
-    //       "title": "New Task uploaded",
-    //       "text": _title.text,
-    //       "sound": "default",
-    //       "tag":"New Task Updates from Farmer"
-    //     },
-    //     "data": {
-    //       "click_action": "FLUTTER_NOTIFICATION_CLICK",
-    //       "screen": "OPEN_HOMEWORK_PAGE",
-    //     },
-    //     "priority": "high",
-    //     "to": '/topics/$email',
-    //   };
-    // //
-    //    var client = new Client();
-    //   var response =
-    //   await client.post(url, headers: header, body: json.encode(request));
-    //   print(response.body);
-    //   print(response.statusCode);
-    //   return true;
-    // } catch (e, s) {
-    //   print(e);
-    //   return false;
-    //  }
+  var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+  _sendnotification() async {
+var topic3=assigned_to.replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+    try {
+      var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization":
+        "key=$serverToken",
+      };
+      var request = {
+        "notification": {
+          "title": "Task is Updated",
+          "body": _title.text,
+          "sound": "default",
+          "tag":"New Updates from Rompin"
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "screen": "Alltasks",
+        },
+        "priority": "high",
+        "to": '/topics/$topic4',
+      };
+      var client = new Client();
+      var response =
+      await client.post(url, headers: header, body: json.encode(request));
+      print(response.body);
+      print(response.statusCode);
+      return true;
+    } catch (e, s) {
+      print(e);
+      return false;
+    }
   }
 
   TextEditingController _textEditingController = TextEditingController();
@@ -138,8 +133,8 @@ var status;
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _startdate != null ? _startdate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -174,8 +169,8 @@ var status;
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _enddate != null ? _enddate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -248,11 +243,22 @@ var status;
       });
     }
   }
-
+  _showdialog(context){
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.SUCCES,
+      animType: AnimType.TOPSLIDE,
+      title: 'Task Updated Successfully',
+      // desc: 'We Have Sent Task to Worker!',
+      //showCloseIcon: true,
+      // btnCancelOnPress: () {},
+      btnOkOnPress: () {},
+    )..show();
+  }
 var _stime,_etime;
   var allnames,allemails;
   List<DropdownMenuItem> items = [];
-  updatetask() async {
+  updatetask(context) async {
     setState(() {
       _progress = true;
     });
@@ -272,14 +278,15 @@ var _stime,_etime;
       'status':status
     }).then((value) {
 
-      // setState(() {
-      //   _starttime=TimeOfDay(hour: 8, minute: 0);
-      // });
+      _sendnotification();
       Toast.show("Task Updated", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+
       setState(() {
         _progress = false;
       });
+      Navigator.pop(context);
+      //_showdialog(context);
     });
 
   }
@@ -302,6 +309,14 @@ var _stime,_etime;
 
   }
 
+  _deleteTask() async {
+      final databaseReference = FirebaseFirestore.instance;
+      print(docid);
+      await databaseReference.collection("tasks").doc(docid).delete().then((value) {
+        Navigator.pop(context,true);
+      });
+
+  }
 
 
   @override
@@ -310,6 +325,14 @@ var _stime,_etime;
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Task"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(child: Icon(Icons.delete),onTap: (){
+              _deleteTask();
+            },),
+          )
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -561,7 +584,7 @@ var _stime,_etime;
                         setState(() {
                           _progress=true;
                         });
-                        updatetask();
+                        updatetask(context);
                       }
                       // }
                     },

@@ -1,10 +1,13 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:farmers_app/pending/account_not_approved.dart';
 import 'package:flutter/services.dart';
 import 'package:toast/toast.dart';
+import 'dart:convert';
+import 'package:http/http.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'login.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
@@ -60,6 +63,18 @@ print(_mobileno);
     });
   }
 
+  _showdialog(){
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.SUCCES,
+      animType: AnimType.TOPSLIDE,
+      title: 'Registered Successfully',
+      desc: 'We Have Sent Your Request to manager!',
+      //showCloseIcon: true,
+      // btnCancelOnPress: () {},
+      btnOkOnPress: () {Navigator.pop(context);},
+    )..show();
+  }
   addnewUser(context) async {
     try {
       await FirebaseAuth.instance
@@ -85,6 +100,11 @@ print(_mobileno);
          // x.updatePhoneNumber(_mobileno.toPhoneAuthCredential());
           Toast.show("Successfully Registered !", context,
               duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+ var topic3=(_emailController.text).replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+          FirebaseMessaging.instance.subscribeToTopic(topic4);
+          _sendnotification();
+          _showdialog();
           setState(() {
             _success = true;
             _progress=false;
@@ -117,6 +137,78 @@ print(_mobileno);
     }
 
   }
+var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+  _sendnotification() async {
+    if(jobtitle=='farmer'){
+      var topic='admin${_companyid.text}';
+      var topic2=topic.replaceAll(' ', "");
+      try {
+        var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+        var header = {
+          "Content-Type": "application/json",
+          "Authorization":
+          "key=$serverToken",
+        };
+        var request = {
+          "notification": {
+            "title": "New User Registered",
+            "body": _username.text,
+            "sound": "default",
+            "tag":"New Updates from Rompin"
+          },
+          "data": {
+            "click_action": "FLUTTER_NOTIFICATION_CLICK",
+            "screen": "NewRegister",
+          },
+          "priority": "high",
+          "to": '/topics/$topic2',
+        };
+        var client = new Client();
+        var response =
+        await client.post(url, headers: header, body: json.encode(request));
+        print(response.body);
+        print(response.statusCode);
+        return true;
+      } catch (e, s) {
+        print(e);
+        return false;
+      }
+    }
+    else{
+      try {
+        var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+        var header = {
+          "Content-Type": "application/json",
+          "Authorization":
+          "key=$serverToken",
+        };
+        var request = {
+          "notification": {
+            "title": "New Farmer Registered",
+            "body": _username.text,
+            "sound": "default",
+            "tag":"New Updates from Rompin"
+          },
+          "data": {
+            "click_action": "FLUTTER_NOTIFICATION_CLICK",
+            "screen": "AdminReq",
+          },
+          "priority": "high",
+          "to": '/topics/superadmin',
+        };
+        var client = new Client();
+        var response =
+        await client.post(Uri.https('fcm.googleapis.com','/fcm/send'), headers: header, body: json.encode(request));
+        print(response.body);
+        print(response.statusCode);
+        return true;
+      } catch (e, s) {
+        print(e);
+        return false;
+      }
+    }
+
+  }
 
   DateTime _selectedDate=DateTime.now();
 
@@ -133,8 +225,8 @@ print(_mobileno);
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -372,7 +464,7 @@ formOneBuilder(BuildContext context) {
                   SizedBox(height: 30,),
                   Container(
                     child: RoundedButton(
-                      text: "Update Data",
+                      text: "Next",
                       state: false,
                       press: () {
                         if (_formKey1.currentState.validate()) {
@@ -493,7 +585,7 @@ formOneBuilder(BuildContext context) {
                       ),
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(0.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,

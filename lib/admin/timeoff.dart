@@ -80,7 +80,7 @@ class _RequestsScreenState extends State<TimeOff> {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TimeOffRequestPage(document.data())),
+                      MaterialPageRoute(builder: (context) => TimeOffRequestPage(document.data(),document.id)),
                     );
                   },
                 );

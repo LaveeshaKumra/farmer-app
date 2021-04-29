@@ -1,38 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'chart.dart';
 import 'package:flutter/material.dart';
 
-class Calendar2 extends StatefulWidget {
+class Calendar extends StatefulWidget {
+  var email;
+  Calendar(e){
+    this.email=e;
+  }
   @override
-  _Calendar2State createState() => _Calendar2State();
+  _Calendar2State createState() => _Calendar2State(this.email);
 }
 
-class _Calendar2State extends State<Calendar2> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class _Calendar2State extends State<Calendar> {
+  var email;
   DateTime _dateTime;
   QuerySnapshot _userEventSnapshot,_userEventSnapshot2;
   int _beginMonthPadding=0;
 
-  _Calendar2State() {
+  _Calendar2State(e) {
     _dateTime = DateTime.now();
     setMonthPadding();
+    this.email=e;
   }
 
   Future<QuerySnapshot> _getCalendarData() async {
-    var currentUser = await _auth.currentUser;
 
-    if (currentUser != null) {
+    if (email != null) {
       QuerySnapshot userEvents = await FirebaseFirestore.instance
           .collection('timeoff')
-          //.where(
-         // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: currentUser.email)
+      //.where(
+      // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
+          .where('email', isEqualTo: email)
           .get();
       QuerySnapshot userEvents2 = await FirebaseFirestore.instance
           .collection('attendance')
       //.where(
       // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: currentUser.email)
+          .where('email', isEqualTo: email)
           .get();
       _userEventSnapshot2=userEvents2;
       _userEventSnapshot = userEvents;
@@ -138,105 +142,121 @@ class _Calendar2State extends State<Calendar2> {
             // ),
           ],
         ),
-
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.bar_chart),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserReportChart(email)),
+            );
+          },
+        ),
         body:
-        new FutureBuilder(
-            future: _getCalendarData(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return new LinearProgressIndicator();
-                case ConnectionState.done:
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new Row(
+        ListView(
+          children: [
+            new FutureBuilder(
+                future: _getCalendarData(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return new LinearProgressIndicator();
+                    case ConnectionState.done:
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: new Column(
                           children: <Widget>[
-                            new Expanded(
-                                child: new Text('Sun',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Mon',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Tue',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Wed',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Thr',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Fri',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                            new Expanded(
-                                child: new Text('Sat',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Row(
+                              children: <Widget>[
+                                new Expanded(
+                                    child: new Text('Sun',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Mon',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Tue',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Wed',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Thr',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Fri',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                                new Expanded(
+                                    child: new Text('Sat',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              //mainAxisSize: MainAxisSize.min,
+                            ),
+                            Container(
+                              // decoration: new BoxDecoration(
+                              //     border: new Border.all(
+                              //         color: Colors.grey)),
+                              child: new GridView.count(
+                                crossAxisCount: numWeekDays,
+                                childAspectRatio: (itemWidth / itemHeight),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                children: List.generate(
+                                    getNumberOfDaysInMonth(_dateTime.month),
+                                        (index) {
+                                      int dayNumber = index + 1;
+                                      return new GestureDetector(
+                                        // Used for handling tap on each day view
+                                          onTap: () =>
+                                              buildDialog(
+                                                  dayNumber ),
+                                          child: new Container(
+                                              margin: const EdgeInsets.all(2.0),
+                                              padding: const EdgeInsets.all(1.0),
+                                              // decoration: new BoxDecoration(
+                                              //     border: new Border.all(
+                                              //         color: Colors.grey)),
+                                              child: new Column(
+                                                children: <Widget>[
+
+                                                  buildDayNumberWidget(dayNumber),
+                                                  buildattendancecircle(dayNumber),
+                                                  buildDayEventInfoWidget(dayNumber)
+                                                ],
+                                              )));
+                                    }),
+                              ),
+                            )
                           ],
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //mainAxisSize: MainAxisSize.min,
                         ),
-                        Container(
-                          // decoration: new BoxDecoration(
-                          //     border: new Border.all(
-                          //         color: Colors.grey)),
-                          child: new GridView.count(
-                            crossAxisCount: numWeekDays,
-                            childAspectRatio: (itemWidth / itemHeight),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            children: List.generate(
-                                getNumberOfDaysInMonth(_dateTime.month),
-                                    (index) {
-                                  int dayNumber = index + 1;
-                                  return new GestureDetector(
-                                    // Used for handling tap on each day view
-                                      onTap: () =>
-                                          buildDialog(
-                                              dayNumber ),
-                                      child: new Container(
-                                          margin: const EdgeInsets.all(2.0),
-                                          padding: const EdgeInsets.all(1.0),
-                                          // decoration: new BoxDecoration(
-                                          //     border: new Border.all(
-                                          //         color: Colors.grey)),
-                                          child: new Column(
-                                            children: <Widget>[
-                                              buildDayNumberWidget(dayNumber),
-                                              buildattendancecircle(dayNumber),
-                                              buildDayEventInfoWidget(dayNumber)
-                                            ],
-                                          )));
-                                }),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                  break;
-                default:
-                  if (snapshot.hasError)
-                    return new Text('Error: ${snapshot.error}');
-                  else
-                    return new Text('Result: ${snapshot.data}');
-              }
-            }
+                      );
+                      break;
+                    default:
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      else
+                        return new Text('Result: ${snapshot.data}');
+                  }
+                }
+            ),
+          ],
         )
     );
   }
+
   Widget buildattendancecircle(int dayNumber) {
     int eventCount = 0;
     DateTime eventDate,eventDate2;
+    var eventtitle,eventstatus;
 
     _userEventSnapshot2.docs.forEach((doc) {
       eventDate = doc.data()['in_time'].toDate();
@@ -246,7 +266,8 @@ class _Calendar2State extends State<Calendar2> {
           && eventDate.month == _dateTime.month
           && eventDate.year == _dateTime.year) {
         eventCount++;
-
+        // eventtitle=doc.data()['title'];
+        // eventstatus=doc.data()['status'];
       }
     });
 
@@ -254,10 +275,10 @@ class _Calendar2State extends State<Calendar2> {
       return new Container(
         width: 10.0,
         height: 10.0,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
+    decoration: BoxDecoration(
+    color: Colors.green,
+    shape: BoxShape.circle,
+    ),
       );
     } else {
       return new Container(
@@ -312,19 +333,33 @@ class _Calendar2State extends State<Calendar2> {
       );
     }
   }
+  _reject(id) async {
+    final databaseReference = FirebaseFirestore.instance;
+    await databaseReference.collection("timeoff").doc(id).update({'status':'Rejected'}).then((value) {
+      Navigator.pop(context,true);
+    });
 
+  }
+
+  _accept(id) async {
+    final databaseReference = FirebaseFirestore.instance;
+    await databaseReference.collection("timeoff").doc(id).update({'status':'Accepted'}).then((value) {
+      Navigator.pop(context,true);
+    });
+  }
   converttime(t) {
     TimeOfDay time=TimeOfDay(hour: t.hour,minute: t.minute);
     return time;
   }
-   buildDialog(int dayNumber) {
+  buildDialog(int dayNumber) {
     int eventCount = 0;
     DateTime eventDate,eventDate2;
-    var eventtitle,eventdesc,eventstatus;
+    var eventtitle,eventdesc,eventstatus,docid;
 
     _userEventSnapshot.docs.forEach((doc) {
       eventDate = doc.data()['start_date'].toDate();
       eventDate2= doc.data()['end_date'].toDate();
+      docid=doc.id;
       if (eventDate != null
           && eventDate.day <= dayNumber - _beginMonthPadding && eventDate2.day >= dayNumber - _beginMonthPadding
           && eventDate.month == _dateTime.month
@@ -337,32 +372,46 @@ class _Calendar2State extends State<Calendar2> {
     });
 
     if (eventCount > 0) {
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("$eventtitle"),
-            content: Text("$eventdesc\nStatus : $eventstatus"),
-            actions: [
-              FlatButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      // return new Expanded(
-      //   child:
-      //   new Text(
-      //     "$eventtitle",
-      //     maxLines: 2,
-      //     style: new TextStyle(fontWeight: FontWeight.normal,
-      //         background: Paint()..color = Colors.tealAccent),
-      //   ),
-      // );
+     if(eventstatus=="Pending"){
+       return showDialog(
+         context: context,
+         builder: (BuildContext context) {
+           return AlertDialog(
+             title: Text("Approve/Deny Request From TimeOff Request Page"),
+             content: Text("$eventtitle\nStatus : $eventstatus"),
+             actions: [
+               FlatButton(
+                 child: Text("OK"),
+                 onPressed: () {
+                   Navigator.of(context).pop();
+                 },
+               ),
+             ],
+           );
+         },
+       );
+     }
+     else {
+       return showDialog(
+         context: context,
+         builder: (BuildContext context) {
+           return AlertDialog(
+             title: Text("$eventtitle"),
+             content: Text("$eventdesc\nStatus : $eventstatus"),
+             actions: [
+
+               FlatButton(
+                 child: Text("OK"),
+                 onPressed: () {
+                   Navigator.of(context).pop();
+                 },
+               ),
+             ],
+           );
+         },
+       );
+     }
+
     } else {
       int eventCount2=0;
       var intime,outtime;
@@ -543,7 +592,7 @@ class _Calendar2State extends State<Calendar2> {
       case 0:
         break;
       case 1:
-        //Navigator.pushNamed(context, Constants.calContactsRoute);
+      //Navigator.pushNamed(context, Constants.calContactsRoute);
         break;
     }
   }

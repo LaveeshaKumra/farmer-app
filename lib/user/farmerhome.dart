@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farmers_app/super_admin/taskdetails.dart';
+import 'taskdetail.dart';
 import 'package:farmers_app/user/attendance.dart';
 import 'package:farmers_app/user/graph.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,17 +20,21 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
 
   _HomePageFarmerState() {
     _getUser();
-
-
   }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+   
   var firebase = FirebaseAuth.instance;
 
   _selectDate(BuildContext context) async {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate:  DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2040),
+        firstDate: DateTime(1970),
+        lastDate: DateTime(DateTime.now().year+1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -78,6 +82,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
 
   @override
   Widget build(BuildContext context) {
+    print(_choosedate);
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -134,7 +139,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                     ),
                     Flexible(
                       child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection("tasks").where("assigned_to",isEqualTo: email).where('end_date',isGreaterThanOrEqualTo: _choosedate).snapshots(),
+                        stream: FirebaseFirestore.instance.collection("tasks").where("assigned_to",isEqualTo: email).where('end_date',isGreaterThanOrEqualTo: DateTime(_choosedate.year,_choosedate.month,_choosedate.day,0,0,0,0)).snapshots(),
                         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasError) {
                             return Center(child: Text('Something went wrong'));
@@ -199,14 +204,14 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                              //  ));
                               return new InkWell(
                                 child: ListTile(
-                                  trailing: document.data()['status']=="Pending"?Icon(Icons.warning,color: Colors.yellow,):document.data()['status']=="Rejected"?Icon(Icons.cancel_rounded,color: Colors.red,):Icon(Icons.check_circle,color: Colors.green,),
+                                  trailing: document.data()['status']=="Done"?Icon(Icons.check_circle,color: Colors.green,):Icon(Icons.warning,color: Colors.yellow,),
                                   title: document.data()['title']==null?Text(''):Text(document.data()['title']),
                                   subtitle: Text("From ${_convertdate(document.data()['start_date'].toDate())} to ${_convertdate(document.data()['end_date'].toDate())}"),
                                 ),
                                 onTap: (){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => TaskDetails(document.data())),
+                                    MaterialPageRoute(builder: (context) => TaskDetailsInfarmer(document.data(),document.id)),
                                   );
                                 },
                               );
@@ -271,7 +276,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                         onTap: (){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ReportPage()),
+                            MaterialPageRoute(builder: (context) => ReportPage(email)),
                           );
                         },
                       )
@@ -287,7 +292,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
                         onTap:(){
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Attendance(email)),
+                  MaterialPageRoute(builder: (context) => Attendance(email,company,name)),
                   );
                   },
                         child: Card(

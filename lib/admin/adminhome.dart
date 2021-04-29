@@ -4,11 +4,12 @@ import 'package:farmers_app/admin/timeoff.dart';
 import 'package:farmers_app/admin/workerRequest.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'addtask.dart';
 import 'allteam.dart';
 import 'homepageadmin.dart';
-
+import 'allrewards.dart';
 class AdminPage extends StatefulWidget {
   @override
   _AdminPageState createState() => _AdminPageState();
@@ -18,6 +19,8 @@ class _AdminPageState extends State<AdminPage> {
   var image, company, email;
   _AdminPageState() {
     _getUser();
+
+
   }
   var firebase = FirebaseAuth.instance;
 
@@ -42,7 +45,113 @@ class _AdminPageState extends State<AdminPage> {
           image = "assets/female.png";
         });
       }
+      var topic='admin$company';
+      var topic2=topic.replaceAll(' ', "");
+      var topic3=email.replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+      print(topic2);
+      print(topic4);
+      FirebaseMessaging.instance.subscribeToTopic(topic2);
+      FirebaseMessaging.instance.subscribeToTopic(topic4);
     });
+  }
+
+  void initState() {
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: ListTile(
+                title: Text(message.notification.title),
+                subtitle: Text(message.notification.body),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          );
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print(message.data['screen']);
+      print('A new onMessageOpenedApp event was published!');
+      switch (message.data['screen']) {
+        case "TimeoffAdmin":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TimeOff(company)),
+          );
+          break;
+        case "AllTasksAdmin":
+
+          break;
+        case "NewRegister":
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WorkerRequestsScreen(company)),
+          );
+          break;
+        case "login":
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+          break;
+        default:
+          break;
+      }
+
+      // Navigator.pushNamed(context, '/message',
+      //     arguments: MessageArguments(message, true));
+    });
+    // _fcm.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //         content: ListTile(
+    //           title: Text(message['notification']['title']),
+    //           subtitle: Text(message['notification']['body']),
+    //         ),
+    //         actions: <Widget>[
+    //           FlatButton(
+    //             child: Text('Ok'),
+    //             onPressed: () => Navigator.of(context).pop(),
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print("onLaunch: $message");
+    //     // TODO optional
+    //   },
+    //   onResume: (Map<String, dynamic> msg) async {
+    //     switch (msg['data']['screen']) {
+    //       case "OPEN_HOMEWORK_PAGE":
+    //         Navigator.push(
+    //           context,
+    //           MaterialPageRoute(builder: (context) => CalPage(clas, branch)),
+    //         );
+    //         break;
+    //       case "OPEN_UPDATE_PAGE":
+    //         Navigator.push(
+    //           context,
+    //           MaterialPageRoute(builder: (context) => Updates()),
+    //         );
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   },
+    // );
   }
 
   @override
@@ -111,10 +220,17 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   _logout() async {
-    await firebase.signOut().then((value) => {
+    await firebase.signOut().then((value)  {
+      var topic='admin$company';
+      var topic2=topic.replaceAll(' ', "");
+      var topic3=email.replaceAll('@',"");
+      var topic4=topic3.replaceAll('.', "");
+      print(topic2);
+      FirebaseMessaging.instance.unsubscribeFromTopic(topic2);
+      FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LoginPage()),
-              (Route<dynamic> route) => false),
+              (Route<dynamic> route) => false);
         });
   }
 
@@ -195,6 +311,17 @@ class _NavDrawerState extends State<NavDrawer> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => TimeOff(company)),
+              )
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.card_giftcard_sharp),
+            title: Text('Rewards'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AllRewards(email)),
               )
             },
           ),
