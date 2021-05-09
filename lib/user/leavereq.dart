@@ -98,7 +98,7 @@ class _PastReqState extends State<PastReq> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RequestDetail(document.data())),
+                    MaterialPageRoute(builder: (context) => RequestDetail(document.data(),document.id)),
                   );
                 },
               );

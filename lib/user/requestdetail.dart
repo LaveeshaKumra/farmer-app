@@ -4,35 +4,28 @@ import 'package:intl/intl.dart';
 
 
 class RequestDetail extends StatefulWidget {
-  var data;
-  RequestDetail(d) {
+  var data,docid;
+  RequestDetail(d,id) {
     this.data = d;
+    this.docid=id;
   }
   @override
-  _TimeOffRequestPageState createState() => _TimeOffRequestPageState(this.data);
+  _TimeOffRequestPageState createState() => _TimeOffRequestPageState(this.data,this.docid);
 }
 
 class _TimeOffRequestPageState extends State<RequestDetail> {
-  var data;
-  _TimeOffRequestPageState(d) {
+  var data,docid;
+  _TimeOffRequestPageState(d,id) {
     this.data = d;
-    _getid();
+    this.docid=id;
   }
   _convertdate(d){
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formatted = formatter.format(d);
     return formatted;
   }
-  var docid;
-  _getid() async {
-    final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("timeoff").where('email',isEqualTo: data['email']).get().then((value){setState(() {
-      docid= value.docs[0].id;
-    });});
 
-  }
   _deletereq() async {
-    print(docid);
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("timeoff").doc(docid).delete().then((value) {
       Navigator.pop(context,true);

@@ -286,7 +286,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            title: Text('Leave Entitlement'),
+            title: Text('Leave Request'),
             onTap: () => {
               Navigator.push(
                 context,

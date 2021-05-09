@@ -35,11 +35,20 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
   List<String> giftdropdown=[
     "Hospitalisation leave","Emergency Leave","Maternity Leave","Paternity Leave","Compassionate Leave"
   ];
+  bool isNumericUsingRegularExpression(String string) {
+    final numericRegex =
+    RegExp(r'^-?(([0-9]*)|(([0-9]*)\.([0-9]*)))$');
+
+    return numericRegex.hasMatch(string);
+  }
   var type;
   bool _success;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("New Leave Entitlement"),
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -84,8 +93,8 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
                 child: TextFormField(
                   controller: _title,
                   validator: (var value) {
-                    if (value.isEmpty) {
-                      return 'Please enter a valid reward title';
+                    if (value.isEmpty || !isNumericUsingRegularExpression(value)) {
+                      return 'Please enter valid number';
                     }
                     return null;
                   },
@@ -93,7 +102,7 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
                   maxLines: 5,
                   cursorColor: Colors.teal,
                   decoration: InputDecoration(
-                      hintText: "",
+                      hintText: "Enter number of leave entitlement",
 
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
@@ -110,7 +119,7 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 32),
                   child: RoundedButton(
-                    text: "Add Laeve Entitlement",
+                    text: "Add Leave Entitlement",
                     state: _progress,
                     press: () {
 
@@ -151,15 +160,23 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference
         .collection("users")
-        .doc(docid)
-        .update({
-      'leaveEnt': {type:_title.text}
-    }).then((value) {
-      Toast.show("Leave Entitlement Added", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-      Navigator.pop(context);
+        .doc(docid).get().then((value) async {
+          var x= (value.data()['leaveEnt']);
+          x[type]=_title.text;
+          print(x);
+      await databaseReference
+          .collection("users")
+          .doc(docid)
+          .update({
+        'leaveEnt': x
+      }).then((value) {
+        Toast.show("Leave Entitlement Added", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+        Navigator.pop(context);
 
+      });
     });
+
 
 
   }

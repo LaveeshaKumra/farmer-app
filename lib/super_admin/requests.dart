@@ -19,7 +19,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
     Query  collectionStream = FirebaseFirestore.instance.collection("users").where('role',isEqualTo: 'admin').where('status',isEqualTo: 'Pending');
     return Scaffold(
         appBar: AppBar(
-        title: Text("Admin Requests"),
+        title: Text("Farmer's Requests"),
     ),
     body:Center(
       child: StreamBuilder<QuerySnapshot>(

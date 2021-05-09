@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/view%20leaves.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'addleaveent.dart';
 
-class LeaveEntitlementUser extends StatefulWidget {
+class LeaveEntitlementUserSuperUser extends StatefulWidget {
   var email,docid;
-  LeaveEntitlementUser(e,id) {
+  LeaveEntitlementUserSuperUser(e,id) {
     print(id);
     this.email = e;
     this.docid=id;
@@ -16,7 +15,7 @@ class LeaveEntitlementUser extends StatefulWidget {
       _LeaveEntilementUserState(this.email,this.docid);
 }
 
-class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
+class _LeaveEntilementUserState extends State<LeaveEntitlementUserSuperUser> {
 
   var keys = [];
   var values = [];
@@ -36,17 +35,7 @@ class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
       appBar: AppBar(
         title: Text("Leave Entitlement"),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    AddLeaveEntitlement(email)),
-          );
-        },
-      ),
+
       body: StreamBuilder<QuerySnapshot>(
         stream: collectionStream.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -133,8 +122,8 @@ class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
                                         .data()['end_date']
                                         .toDate()
                                         .difference(snapshot2.data.docs[i]
-                                            .data()['start_date']
-                                            .toDate())
+                                        .data()['start_date']
+                                        .toDate())
                                         .inHours;
                                   }
                                   days = hours / 24;
@@ -210,24 +199,18 @@ class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
   }
 
   update(num,key) async {
+    print(num);
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference
         .collection("users")
-        .doc(docid).get().then((value) async {
-      var x= (value.data()['leaveEnt']);
-      x[key]=num;
-      print(x);
-      await databaseReference
-          .collection("users")
-          .doc(docid)
-          .update({
-        'leaveEnt': x
-      }).then((value) {
-        Toast.show("Leave Updated", context,
-            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-        Navigator.pop(context);
+        .doc(docid)
+        .update({
+      'leaveEnt': {key:num}
+    }).then((value) {
+      Toast.show("Leaves Updated", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      Navigator.pop(context);
 
-      });
     });
 
   }

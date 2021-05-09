@@ -78,7 +78,7 @@ class _AllUsersState extends State<AllUsers> {
                           leading: Icon(Icons.person),
                           title: document.data()['username']==null?Text(''):Text(document.data()['username']),
                           subtitle: Text(document.data()['email']),
-                          trailing: Text(document.data()['role']),
+                          trailing:document.data()['role']=="admin"? Text("Farmer"):Text("Worker"),
                         ),
                         onTap: (){
                           Navigator.push(

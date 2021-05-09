@@ -369,7 +369,7 @@ var genders=["Male","Female","Others"];
 
                   cursorColor: Colors.teal,
                   decoration: InputDecoration(
-                      hintText: _jobtitle.text,
+                      hintText: _jobtitle.text=="admin"?"Farmer":"Worker",
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
                           horizontal: 25, vertical: 13)),

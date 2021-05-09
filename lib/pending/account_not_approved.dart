@@ -64,8 +64,10 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
     }
   }
   _logout() async {
+    var email=FirebaseAuth.instance.currentUser.email;
+    print(email);
     await firebase.signOut().then((value) {
-      var topic3 = firebase.currentUser.email.replaceAll('@', "");
+      var topic3 = email.replaceAll('@', "");
       var topic4 = topic3.replaceAll('.', "");
       FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
       Navigator.pushReplacement(

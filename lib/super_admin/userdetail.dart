@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/addreward.dart';
 import 'package:farmers_app/admin/calendar.dart';
 import 'package:farmers_app/admin/chart.dart';
-import 'package:farmers_app/admin/leaveentilement2.dart';
+import 'leaveentitlement-superadmin.dart';
 import 'package:farmers_app/admin/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boom_menu/flutter_boom_menu.dart';
@@ -80,56 +80,56 @@ class _UserDetailState extends State<UserDetail> {
                   builder: (context) => ProfilePage(data['email'])),
             ),
           ),
-      //     MenuItem(
-      //       child: Icon(Icons.calendar_today, color: Colors.black),
-      //       title: "Calendar",
-      //       titleColor: Colors.white,
-      //       subtitle: "Check Worker's Calender",
-      //       subTitleColor: Colors.white,
-      //       backgroundColor: Colors.green,
-      //       onTap: () =>  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => Calendar(data['email'])),
-      //       ),
-      //     ),
-      //     MenuItem(
-      //       child: Icon(Icons.bar_chart, color: Colors.black),
-      //       title: "Report",
-      //       titleColor: Colors.white,
-      //       subtitle: "Check Working Hours Report",
-      //       subTitleColor: Colors.white,
-      //       backgroundColor: Colors.blue,
-      //       onTap: () =>  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => UserReportChart(data['email'])),
-      //       ),
-      //     ),
-      //     MenuItem(
-      //       child: Icon(Icons.access_time, color: Colors.black),
-      //       title: "Leaves Entitlement",
-      //       titleColor: Colors.white,
-      //       subtitle: "View All Leaves Entitlement",
-      //       subTitleColor: Colors.white,
-      //       backgroundColor: Colors.redAccent,
-      //       onTap: () =>  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => LeaveEntitlementUser(data['email'],docid)),
-      //       ),
-      //     ),
-      //     MenuItem(
-      //       child: Icon(Icons.card_giftcard, color: Colors.black),
-      //       title: "Rewards",
-      //       titleColor: Colors.white,
-      //       subtitle: "Send Reward",
-      //       subTitleColor: Colors.white,
-      //       backgroundColor: Colors.deepPurpleAccent,
-      //       onTap: () =>  Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => AddReward(data['email'])),
-      //       ),
-      //     )
+          MenuItem(
+            child: Icon(Icons.calendar_today, color: Colors.black),
+            title: "Calendar",
+            titleColor: Colors.white,
+            subtitle: "Check Worker's Calender",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.green,
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Calendar(data['email'])),
+            ),
+          ),
+          MenuItem(
+            child: Icon(Icons.bar_chart, color: Colors.black),
+            title: "Report",
+            titleColor: Colors.white,
+            subtitle: "Check Working Hours Report",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.blue,
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserReportChart(data['email'])),
+            ),
+          ),
+          MenuItem(
+            child: Icon(Icons.access_time, color: Colors.black),
+            title: "Leaves Entitlement",
+            titleColor: Colors.white,
+            subtitle: "View All Leaves Entitlement",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.redAccent,
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LeaveEntitlementUserSuperUser(data['email'],docid)),
+            ),
+          ),
+          MenuItem(
+            child: Icon(Icons.card_giftcard, color: Colors.black),
+            title: "Rewards",
+            titleColor: Colors.white,
+            subtitle: "Send Reward",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.deepPurpleAccent,
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddReward(data['email'])),
+            ),
+          )
         ],
       ),
       body: data == null || data == ""
@@ -205,7 +205,7 @@ class _UserDetailState extends State<UserDetail> {
               style: TextStyle(color: Colors.teal, fontSize: 12.0),
             ),
             subtitle: Text(
-              data['role'],
+              data['role']=="admin"?"Farmer":"Worker",
               style: TextStyle(fontSize: 18.0),
             ),
           ),

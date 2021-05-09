@@ -7,19 +7,26 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 class AddReq extends StatefulWidget {
-  var email,company,name;
-  AddReq(e,n,c){this.email=e;this.name=n;this.company=c;}
+  var email, company, name;
+  AddReq(e, n, c) {
+    this.email = e;
+    this.name = n;
+    this.company = c;
+  }
   @override
-  _AddReqState createState() => _AddReqState(this.email,this.name,this.company);
+  _AddReqState createState() =>
+      _AddReqState(this.email, this.name, this.company);
 }
 
 class _AddReqState extends State<AddReq> {
-  var email,_type,company,name;
-  _AddReqState(e,n,c){this.email=e;this.name=n;this.company=c;}
-  List<String> _leavetype=[
-    "Sick Leave","Day Off","Others"
-  ];
-  var _progress=false;
+  var email, _type, company, name;
+  _AddReqState(e, n, c) {
+    this.email = e;
+    this.name = n;
+    this.company = c;
+  }
+  List<String> _leavetype = ["Sick Leave", "Day Off", "Others"];
+  var _progress = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
@@ -27,10 +34,10 @@ class _AddReqState extends State<AddReq> {
   bool _success;
 
   TextEditingController _textEditingController = TextEditingController();
-  DateTime _startdate=DateTime.now();
-  DateTime _enddate=DateTime.now();
-
-  _showdialog(){
+  DateTime _startdate = DateTime.now();
+  DateTime _enddate = DateTime.now();
+var noleaves=false;
+  _showdialog() {
     return AwesomeDialog(
       context: context,
       dialogType: DialogType.SUCCES,
@@ -39,7 +46,9 @@ class _AddReqState extends State<AddReq> {
       desc: 'We Have Sent Your Request to manager!',
       //showCloseIcon: true,
       // btnCancelOnPress: () {},
-      btnOkOnPress: () {Navigator.pop(context);},
+      btnOkOnPress: () {
+        Navigator.pop(context);
+      },
     )..show();
   }
 
@@ -48,7 +57,7 @@ class _AddReqState extends State<AddReq> {
         context: context,
         initialDate: _startdate != null ? _startdate : DateTime.now(),
         firstDate: DateTime(1970),
-        lastDate: DateTime(DateTime.now().year+1),
+        lastDate: DateTime(DateTime.now().year + 1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -83,7 +92,7 @@ class _AddReqState extends State<AddReq> {
         context: context,
         initialDate: _enddate != null ? _enddate : DateTime.now(),
         firstDate: DateTime(1970),
-        lastDate: DateTime(DateTime.now().year+1),
+        lastDate: DateTime(DateTime.now().year + 1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -111,28 +120,31 @@ class _AddReqState extends State<AddReq> {
             affinity: TextAffinity.upstream));
     }
   }
-  _convertdate(d){
+
+  _convertdate(d) {
     final DateFormat formatter = DateFormat('dd MMMM,yy');
     final String formatted = formatter.format(d);
     return formatted;
   }
-  var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
+
+  var serverToken =
+      "AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee_4K0yM3ZVPoWOBUmiVg9p-jqwLStOkxS0Xmp8QCYaoGY7wWd-4qCgR0k35zoDV1dmOBq04YQQ-WdfLxJYV3UrQGBQ";
   _sendnotification() async {
-    var topic='admin$company';
-    var topic2=topic.replaceAll(' ', "");
+    var topic = 'admin$company';
+    var topic2 = topic.replaceAll(' ', "");
     try {
       var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
       var header = {
         "Content-Type": "application/json",
-        "Authorization":
-        "key=$serverToken",
+        "Authorization": "key=$serverToken",
       };
       var request = {
         "notification": {
           "title": "New Leave Request from $name",
-          "body": "From ${_convertdate(_startdate)} to ${_convertdate(_enddate)}",
+          "body":
+              "From ${_convertdate(_startdate)} to ${_convertdate(_enddate)}",
           "sound": "default",
-          "tag":"New Updates from Rompin"
+          "tag": "New Updates from Rompin"
         },
         "data": {
           "click_action": "FLUTTER_NOTIFICATION_CLICK",
@@ -143,47 +155,40 @@ class _AddReqState extends State<AddReq> {
       };
       var client = new Client();
       var response =
-      await client.post(url, headers: header, body: json.encode(request));
-      print(response.body);
-      print(response.statusCode);
+          await client.post(url, headers: header, body: json.encode(request));
+
       return true;
     } catch (e, s) {
-      print(e);
       return false;
     }
   }
 
   addwork() async {
     setState(() {
-      _progress=true;
+      _progress = true;
     });
-    print(_enddate.runtimeType);
-    print(_startdate.runtimeType);
+
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("timeoff")
-        .add({
-      'email':email,
+    await databaseReference.collection("timeoff").add({
+      'email': email,
       'title': _title.text,
-      'description':_description.text,
-      'company':company,
-      'username':name,
-      "end_date":_enddate,
-      "start_date":_startdate,
-      "status":"Pending"
+      'description': _description.text,
+      'company': company,
+      'username': name,
+      "end_date": _enddate,
+      "start_date": _startdate,
+      "status": "Pending",
+      "leavetype":_type
     }).then((value) async {
-      print(value);
       _sendnotification();
-      //await sendAndRetrieveMessage('${list1[i]}-Vrinda');
       setState(() {
-        _progress=false;
+        _progress = false;
       });
 
       _showdialog();
     });
-
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,9 +204,8 @@ class _AddReqState extends State<AddReq> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10)), //here
-                  ),
-
+                borderRadius: BorderRadius.all(Radius.circular(10)), //here
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ListView(
@@ -224,140 +228,340 @@ class _AddReqState extends State<AddReq> {
                         cursorColor: Colors.teal,
                         decoration: InputDecoration(
                             hintText: "Leave Subject",
-
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 13)),
                       ),
                     ),
-
-                    SizedBox(
-                      height: 20,
-                    ), Material(
-                      color: Colors.grey[200],
-                      elevation: 2.0,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:20.0),
-                        child: DropdownButton(
-
-                          isExpanded: true,
-                          hint: Text('Leave Type'),
-                          value: _type,
-                          items: _leavetype
-                              .map((e) =>
-                              DropdownMenuItem(value: e, child: Text(e)))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _type = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Material(
-                      color: Colors.grey[200],
-                      elevation: 2.0,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      child: TextFormField(
-                        validator: (var value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a valid date';
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("users")
+                            .where('email', isEqualTo: email)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          var numberofleaves;
+                          if (snapshot.hasError) {
+                            return Text('Something went wrong');
                           }
-                          return null;
-                        },
-                        //focusNode: AlwaysDisabledFocusNode(),
-                        controller: _textEditingController,
-                        onTap: () {
-                          _selectDate(context);
-                        },
 
-                        cursorColor: Colors.teal,
-                        decoration: InputDecoration(
-                            hintText: "Starting Date",
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 13)),
-
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Material(
-                      color: Colors.grey[200],
-                      elevation: 2.0,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      child: TextFormField(
-                        validator: (var value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a valid date';
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text("...");
                           }
-                          return null;
-                        },
-                        //focusNode: AlwaysDisabledFocusNode(),
-                        controller: _textEditingController2,
-                        onTap: () {
-                          _selectDate2(context);
-                        },
+                          var x=[];
+                          var map=snapshot.data.docs[0]
+                              .data()['leaveEnt'];
+                          var keys=snapshot.data.docs[0]
+                              .data()['leaveEnt'].keys;
+                          keys.forEach((v){x.add(v);});
+                          return Column(
+                            children: [
+                              Material(
+                                color: Colors.grey[200],
+                                elevation: 2.0,
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 20.0),
+                                  child: DropdownButton(
+                                    isExpanded: true,
+                                    hint: Text('Leave Type'),
+                                    value: _type,
+                                    items: x
+                                        .map((e) => DropdownMenuItem(
+                                            value: e, child: Text(e)))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _type = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              _type==null?Container():SizedBox(
+                                height: 20,
+                              ),
+                              _type==null?Container():StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("timeoff")
+                                      .where('email', isEqualTo: email)
+                                      .where("status", isEqualTo: "Accepted")
+                                      .where("leavetype", isEqualTo: _type)
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot2) {
+                                    if (snapshot.hasError) {
+                                      return Text('Something went wrong');
+                                    }
 
-                        cursorColor: Colors.teal,
-                        decoration: InputDecoration(
-                            hintText: "Ending Date",
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 13)),
+                                    if (snapshot2.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Text("...");
+                                    }
 
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                                    var leaves = snapshot2.data.docs.length;
+                                    if(map[_type]=="0"){
+                                      return Column(
+                                        children: [
+                                          _type==null?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null?Container():Image.asset("assets/icons/sad.png",width: 80,),
+                                          _type==null?Container():Text("You Can't Apply For $_type",style: TextStyle(fontSize: 18),),
+                                          _type==null?Container():Text("Contact Your Manager",style: TextStyle(fontSize: 18),)
 
-                    Material(
-                      color: Colors.grey[200],
-                      elevation: 2.0,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      child: TextFormField(
-                        controller: _description,
-                        cursorColor: Colors.teal,
-                        minLines: 3,
-                        maxLines: 20,
-                        decoration: InputDecoration(
-                            hintText: "Notes",
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 13)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RoundedButton(
-                      text: "Apply Now",
-                      state: _progress,
-                      press: () {
+                                        ],
+                                      );
+                                    }
+                                    if (leaves == 0) {
+                                      numberofleaves=int.parse(map[_type]);
+                                      return Column(
+                                        children: [
+                                          Text(
+                                              "${map[_type]} / ${map[_type]} days leave remaining"),
+                                          _type==null || numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              validator: (var value) {
+                                                if (value.isEmpty) {
+                                                  return 'Please enter a valid date';
+                                                }
+                                                return null;
+                                              },
+                                              //focusNode: AlwaysDisabledFocusNode(),
+                                              controller: _textEditingController,
+                                              onTap: () {
+                                                _selectDate(context);
+                                              },
 
-                        if (_formKey.currentState.validate()) {
-                          setState(() {
-                            _progress=true;
-                          });
-                          addwork();
-                        }
-                        // }
-                      },
-                    ),
+                                              cursorColor: Colors.teal,
+                                              decoration: InputDecoration(
+                                                  hintText: "Starting Date",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null||numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              validator: (var value) {
+                                                if (value.isEmpty) {
+                                                  return 'Please enter a valid date';
+                                                }
+                                                var d=_enddate.difference(_startdate).inDays+1;
+                                                if(d>numberofleaves){
+                                                  return "Can't apply more than $numberofleaves day leave";
+                                                }
+                                                return null;
+                                              },
+                                              //focusNode: AlwaysDisabledFocusNode(),
+                                              controller: _textEditingController2,
+                                              onTap: () {
+                                                _selectDate2(context);
+                                              },
+
+                                              cursorColor: Colors.teal,
+                                              decoration: InputDecoration(
+                                                  hintText: "Ending Date",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null||numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              controller: _description,
+                                              cursorColor: Colors.teal,
+                                              minLines: 3,
+                                              maxLines: 20,
+                                              decoration: InputDecoration(
+                                                  hintText: "Notes",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():RoundedButton(
+                                            text: "Apply Now",
+                                            state: _progress,
+                                            press: () {
+                                              if (_formKey.currentState.validate()) {
+                                                setState(() {
+                                                  _progress = true;
+                                                });
+                                                addwork();
+                                              }
+                                              // }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
+
+                                    else {
+                                      var days, hours = 0;
+                                      for (var i = 0; i < leaves; i++) {
+                                        hours += snapshot2.data.docs[i]
+                                            .data()['end_date']
+                                            .toDate()
+                                            .difference(snapshot2.data.docs[i]
+                                            .data()['start_date']
+                                            .toDate())
+                                            .inDays;
+                                      }
+                                      days = hours+1;
+                                      numberofleaves=int.parse(map[_type]) - days.ceil();
+                                      return Column(
+                                        children: [
+                                          Text(
+                                              "${int.parse(map[_type]) - days.ceil()} / ${map[_type]} days leave remaining"),
+                                          _type==null|| numberofleaves>0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null || numberofleaves>0?Container():Image.asset("assets/icons/sad.png",width: 80,),
+                                          _type==null|| numberofleaves>0?Container():Text("You Can't Apply For $_type",style: TextStyle(fontSize: 18),),
+                                          _type==null|| numberofleaves>0?Container():Text("Contact Your Manager",style: TextStyle(fontSize: 18),),
+
+
+                                          _type==null || numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              validator: (var value) {
+                                                if (value.isEmpty) {
+                                                  return 'Please enter a valid date';
+                                                }
+                                                return null;
+                                              },
+                                              //focusNode: AlwaysDisabledFocusNode(),
+                                              controller: _textEditingController,
+                                              onTap: () {
+                                                _selectDate(context);
+                                              },
+
+                                              cursorColor: Colors.teal,
+                                              decoration: InputDecoration(
+                                                  hintText: "Starting Date",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null||numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              validator: (var value) {
+                                                if (value.isEmpty) {
+                                                  return 'Please enter a valid date';
+                                                }
+                                                var d=_enddate.difference(_startdate).inDays+1;
+                                                if(d>numberofleaves){
+                                                  return "Can't apply more than $numberofleaves day leave";
+                                                }
+                                                return null;
+                                              },
+                                              //focusNode: AlwaysDisabledFocusNode(),
+                                              controller: _textEditingController2,
+                                              onTap: () {
+                                                _selectDate2(context);
+                                              },
+
+                                              cursorColor: Colors.teal,
+                                              decoration: InputDecoration(
+                                                  hintText: "Ending Date",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null||numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():Material(
+                                            color: Colors.grey[200],
+                                            elevation: 2.0,
+                                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                                            child: TextFormField(
+                                              controller: _description,
+                                              cursorColor: Colors.teal,
+                                              minLines: 3,
+                                              maxLines: 20,
+                                              decoration: InputDecoration(
+                                                  hintText: "Notes",
+                                                  border: InputBorder.none,
+                                                  contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 25, vertical: 13)),
+                                            ),
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():SizedBox(
+                                            height: 20,
+                                          ),
+                                          _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():RoundedButton(
+                                            text: "Apply Now",
+                                            state: _progress,
+                                            press: () {
+                                              if (_formKey.currentState.validate()) {
+                                                setState(() {
+                                                  _progress = true;
+                                                });
+                                                addwork();
+                                              }
+                                              // }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
+
+
+                                  }),
+
+
+                            ],
+                          );
+                        }),
+
                     Container(
                       alignment: Alignment.center,
                       child: Text(_success == null
                           ? ''
                           : (_success
-                          ? 'Request Successfully Sent'
-                          : ' failed')),
+                              ? 'Request Successfully Sent'
+                              : ' failed')),
                     ),
                     SizedBox(
                       height: 20,
@@ -372,3 +576,4 @@ class _AddReqState extends State<AddReq> {
     );
   }
 }
+
