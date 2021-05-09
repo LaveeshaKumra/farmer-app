@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -170,6 +171,7 @@ var genders=["Male","Female","Others"];
     return Scaffold(
       appBar: AppBar(
         title: Text("View Profile"),
+
       ),
       body: _emailController.text == null
           ? Center(

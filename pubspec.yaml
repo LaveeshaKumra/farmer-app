@@ -24,6 +24,8 @@ dependencies:
   grouped_list: ^4.0.0
   awesome_dialog:
   start_chart: ^0.2.0
+  flutter_launcher_icons:
+  flutter_boom_menu: ^1.0.2
 
 
 
@@ -44,3 +46,13 @@ flutter:
     - assets/female.png
     - assets/male.png
     - assets/icons/
+
+flutter_icons:
+  image_path: "assets/code.png"
+  image_path_ios: "assets/code.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "assets/code.png"
+  adaptive_icon_foreground: "assets/code.png"
+  #  run flutter packages pub run flutter_launcher_icons:main

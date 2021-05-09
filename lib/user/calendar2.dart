@@ -32,7 +32,7 @@ class _Calendar2State extends State<Calendar2> {
           .collection('attendance')
       //.where(
       // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: currentUser.email)
+          .where('email', isEqualTo: currentUser.email).where('out_time', isNotEqualTo: "")
           .get();
       _userEventSnapshot2=userEvents2;
       _userEventSnapshot = userEvents;
@@ -88,7 +88,7 @@ class _Calendar2State extends State<Calendar2> {
     /*24 is for notification bar on Android*/
     /*28 is for weekday labels of the row*/
     // 55 is for iPhoneX clipping issue.
-    final double itemHeight = (size.height - kToolbarHeight-kBottomNavigationBarHeight-24-28-55) / 6;
+    final double itemHeight = (size.height - kToolbarHeight-kBottomNavigationBarHeight-24-28-55) / 5;
     final double itemWidth = size.width / numWeekDays;
 
     return new Scaffold(
@@ -205,7 +205,7 @@ class _Calendar2State extends State<Calendar2> {
                                           buildDialog(
                                               dayNumber ),
                                       child: new Container(
-                                          margin: const EdgeInsets.all(2.0),
+                                          margin: const EdgeInsets.all(1.0),
                                           padding: const EdgeInsets.all(1.0),
                                           // decoration: new BoxDecoration(
                                           //     border: new Border.all(
@@ -213,7 +213,9 @@ class _Calendar2State extends State<Calendar2> {
                                           child: new Column(
                                             children: <Widget>[
                                               buildDayNumberWidget(dayNumber),
+                                              SizedBox(height: 5),
                                               buildattendancecircle(dayNumber),
+                                              SizedBox(height: 5),
                                               buildDayEventInfoWidget(dayNumber)
                                             ],
                                           )));

@@ -115,7 +115,7 @@ class _AttendanceState extends State<Attendance> {
           .add({
         'email':email,
         'in_time': d,
-        'out_time':null,
+        'out_time':"",
         'date':DateTime(d.year,d.month,d.day,0,0,0,0,0)
       }).then((value) {
         _sendnotificationin();
@@ -222,7 +222,7 @@ class _AttendanceState extends State<Attendance> {
                 );
               }
               print(snapshot.data.docs[0].data());
-              if(snapshot.data.docs[0].data()['out_time']==null || snapshot.data.docs[0].data()['out_time']=="null") {
+              if(snapshot.data.docs[0].data()['out_time']=="" ) {
                 return Column(
                   children: [
                     Padding(

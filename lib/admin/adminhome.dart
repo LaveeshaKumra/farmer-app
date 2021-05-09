@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farmers_app/admin/leaveentitlement.dart';
 import 'package:farmers_app/admin/profile.dart';
 import 'package:farmers_app/admin/timeoff.dart';
 import 'package:farmers_app/admin/workerRequest.dart';
@@ -10,6 +11,7 @@ import 'addtask.dart';
 import 'allteam.dart';
 import 'homepageadmin.dart';
 import 'allrewards.dart';
+import 'myprofile.dart';
 class AdminPage extends StatefulWidget {
   @override
   _AdminPageState createState() => _AdminPageState();
@@ -259,7 +261,7 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(email)),
+                  MaterialPageRoute(builder: (context) => MyProfilePage(email)),
                 );
               },
             ),
@@ -305,7 +307,18 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            title: Text('TimeOff Request'),
+            title: Text('Leave Entitlement'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LeaveEntitlement(company)),
+              )
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.work_off_outlined),
+            title: Text('Leave Requests'),
             onTap: () => {
               Navigator.push(
                 context,
@@ -331,7 +344,7 @@ class _NavDrawerState extends State<NavDrawer> {
             onTap: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage(email)),
+                MaterialPageRoute(builder: (context) => MyProfilePage(email)),
               )
             },
           ),

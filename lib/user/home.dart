@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farmers_app/admin/profile.dart';
+import 'package:farmers_app/admin/myprofile.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:farmers_app/user/attendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -111,14 +111,36 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: NavDrawer(image, company, email,name),
       appBar: AppBar(title: Text("Hello $name"),
-      // actions: [
-      //   InkWell(
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Icon(Icons.add_alert_rounded),
-      //     ),
-      // )
-      //   ],
+      actions: [
+        GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(50))
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(children: [
+                  Icon(Icons.wallet_giftcard,size: 20,),
+                  SizedBox(width: 5,),
+                  Text("Rewards")
+                ],),
+              ),
+            ),
+          ),
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Rewards(email)),
+            );
+          },
+      )
+        ],
         elevation: 0,),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
@@ -219,7 +241,7 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage(email)),
+                  MaterialPageRoute(builder: (context) => MyProfilePage(email)),
                 );
               },
             ),
@@ -264,7 +286,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            title: Text('TimeOff Request'),
+            title: Text('Leave Entitlement'),
             onTap: () => {
               Navigator.push(
                 context,
@@ -290,7 +312,7 @@ class _NavDrawerState extends State<NavDrawer> {
             onTap: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage(email)),
+                MaterialPageRoute(builder: (context) => MyProfilePage(email)),
               )
             },
           ),

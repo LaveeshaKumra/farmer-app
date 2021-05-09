@@ -29,7 +29,7 @@ class _RequestsScreenState extends State<TimeOff> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("TimeOff Requests"),
+          title: Text("Leave Request"),
 
         ),
         body:

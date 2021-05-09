@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farmers_app/admin/addreward.dart';
+import 'package:farmers_app/admin/calendar.dart';
+import 'package:farmers_app/admin/chart.dart';
+import 'package:farmers_app/admin/leaveentilement2.dart';
 import 'package:farmers_app/admin/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_boom_menu/flutter_boom_menu.dart';
 import 'package:intl/intl.dart';
 
 class UserDetail extends StatefulWidget {
@@ -38,7 +43,7 @@ class _UserDetailState extends State<UserDetail> {
       appBar: AppBar(
         title: Text("User Details"),
         actions: [
-          Padding(
+          data['role']=='admin'?Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(child: Icon(Icons.edit),onTap: (){
               print(data['email']);
@@ -48,7 +53,83 @@ class _UserDetailState extends State<UserDetail> {
                     builder: (context) => ProfilePage(data['email'])),
               );
             },),
-          )
+          ):Container()
+        ],
+      ),
+
+      floatingActionButton: data['role']=='admin'?Container():BoomMenu(
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        //child: Icon(Icons.add),
+        onOpen: () => print('OPENING DIAL'),
+        onClose: () => print('DIAL CLOSED'),
+        scrollVisible: true,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.7,
+        children: [
+          MenuItem(
+            child: Icon(Icons.edit, color: Colors.black),
+            title: "Edit Profile",
+            titleColor: Colors.white,
+            subtitle: "You Can Edit Worker's Details",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.deepOrange,
+            onTap: () =>  Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfilePage(data['email'])),
+            ),
+          ),
+      //     MenuItem(
+      //       child: Icon(Icons.calendar_today, color: Colors.black),
+      //       title: "Calendar",
+      //       titleColor: Colors.white,
+      //       subtitle: "Check Worker's Calender",
+      //       subTitleColor: Colors.white,
+      //       backgroundColor: Colors.green,
+      //       onTap: () =>  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => Calendar(data['email'])),
+      //       ),
+      //     ),
+      //     MenuItem(
+      //       child: Icon(Icons.bar_chart, color: Colors.black),
+      //       title: "Report",
+      //       titleColor: Colors.white,
+      //       subtitle: "Check Working Hours Report",
+      //       subTitleColor: Colors.white,
+      //       backgroundColor: Colors.blue,
+      //       onTap: () =>  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => UserReportChart(data['email'])),
+      //       ),
+      //     ),
+      //     MenuItem(
+      //       child: Icon(Icons.access_time, color: Colors.black),
+      //       title: "Leaves Entitlement",
+      //       titleColor: Colors.white,
+      //       subtitle: "View All Leaves Entitlement",
+      //       subTitleColor: Colors.white,
+      //       backgroundColor: Colors.redAccent,
+      //       onTap: () =>  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => LeaveEntitlementUser(data['email'],docid)),
+      //       ),
+      //     ),
+      //     MenuItem(
+      //       child: Icon(Icons.card_giftcard, color: Colors.black),
+      //       title: "Rewards",
+      //       titleColor: Colors.white,
+      //       subtitle: "Send Reward",
+      //       subTitleColor: Colors.white,
+      //       backgroundColor: Colors.deepPurpleAccent,
+      //       onTap: () =>  Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => AddReward(data['email'])),
+      //       ),
+      //     )
         ],
       ),
       body: data == null || data == ""
@@ -74,7 +155,6 @@ class _UserDetailState extends State<UserDetail> {
           : ListView(
         children: <Widget>[
 
-          SizedBox(height: 20,),
           ListTile(
             title: Text(
               "User Name",

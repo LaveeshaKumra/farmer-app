@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart';
@@ -16,11 +17,13 @@ class TimeOffRequestPage extends StatefulWidget {
 }
 
 class _TimeOffRequestPageState extends State<TimeOffRequestPage> {
-  var data,id;
+  var data,id,name;
   _TimeOffRequestPageState(d,i) {
     this.data = d;
     this.id=i;
   }
+
+
   _convertdate(d){
     final DateFormat formatter = DateFormat('dd MMMM yy');
     final String formatted = formatter.format(d);
@@ -48,6 +51,18 @@ class _TimeOffRequestPageState extends State<TimeOffRequestPage> {
   _sendnotification(status) async {
 var topic3=data['email'].replaceAll('@',"");
       var topic4=topic3.replaceAll('.', "");
+var user = FirebaseAuth.instance.currentUser;
+final databaseReference = FirebaseFirestore.instance;
+await databaseReference
+    .collection("users")
+    .where('email', isEqualTo: user.email)
+    .get()
+    .then((val) async {
+  setState(() {
+    name = val.docs[0]['username'];
+  });
+});
+      print(name);
     try {
       var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
       var header = {
@@ -57,7 +72,7 @@ var topic3=data['email'].replaceAll('@',"");
       };
       var request = {
         "notification": {
-          "title": "Your Time Off Request has been $status",
+          "title": "Your Time Off Request has been $status by $name",
           "body": 'From ${_convertdate(data['start_date'].toDate())} to ${_convertdate(data['end_date'].toDate())}',
           "sound": "default",
           "tag":"New Updates from Rompin"
@@ -159,7 +174,7 @@ var topic3=data['email'].replaceAll('@',"");
           Divider(),
           ListTile(
             title: Text(
-              "TimeOff Reason",
+              "Leave Reason",
               style: TextStyle(color: Colors.teal, fontSize: 12.0),
             ),
             subtitle: Text(

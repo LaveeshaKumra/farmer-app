@@ -32,12 +32,12 @@ class _RegisterState extends State<Register> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _confirmpasswordController = TextEditingController();
 
-  bool _success, _progress = false;var _gender,jobtitle,_mobileno,_mobile;
+  bool _success, _progress = false;var _gender,jobtitle,_mobileno,_mobile,jobtitlevalue;
 List<String> _genderdropdown=[
     "Male","Female","Other"
   ];
   List<String> _jobtitledropdown=[
-    "admin","farmer"
+    "Farmer","Worker"
   ];
   int _stepNumber = 1;
   void saveData1(BuildContext context) {
@@ -81,6 +81,12 @@ print(_mobileno);
           .createUserWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text).then((value) async {
         final databaseReference = FirebaseFirestore.instance;
+        if(jobtitle=="Farmer"){
+        jobtitlevalue = 'admin';
+        }
+        else{
+          jobtitlevalue = 'farmer';
+        }
         await databaseReference.collection("users")
             .add({
           'email': _emailController.text,
@@ -90,8 +96,9 @@ print(_mobileno);
           'dateofbirth':_selectedDate,
           'address':_address.text,
           'company':_companyid.text,
-          'role':jobtitle,
-          'status':'Pending'
+          'role':jobtitlevalue,
+          'status':'Pending',
+          "leaveEnt":{}
 
         }).then((value) async{
           var x=FirebaseAuth.instance.currentUser;
@@ -574,7 +581,9 @@ formOneBuilder(BuildContext context) {
                                 .toList(),
                             onChanged: (value) {
                               setState(() {
-                                jobtitle = value;
+
+                                  jobtitle = value;
+
                               });
                             },
                           ),

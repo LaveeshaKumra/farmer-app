@@ -4,6 +4,7 @@ import 'package:farmers_app/login/login.dart';
 import 'package:farmers_app/super_admin/super_admin_home.dart';
 import 'package:farmers_app/user/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
   _AccountNotApprovedState(){
     _check();
   }
-  var status;
+  var status,email;
   var firebase = FirebaseAuth.instance;
   void _check() async {
     var user = firebase.currentUser;
@@ -29,6 +30,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
       });
     } else {
       final databaseReference = FirebaseFirestore.instance;
+     email=user.email;
       await databaseReference.collection("users").where(
           'email', isEqualTo: user.email).get().then((val) async {
         if (val.docs.isNotEmpty) {
@@ -62,13 +64,17 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
     }
   }
   _logout() async {
-    await firebase.signOut().then((value) => {
+    await firebase.signOut().then((value) {
+      var topic3 = firebase.currentUser.email.replaceAll('@', "");
+      var topic4 = topic3.replaceAll('.', "");
+      FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
-      )
+      );
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

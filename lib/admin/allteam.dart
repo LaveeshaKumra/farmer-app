@@ -81,7 +81,13 @@ class _AllUsersState extends State<AllUsersincompany> {
               ),
             );
           }
-
+          if(snapshot.data.docs.length==0){
+            return Center(
+              child: Container(
+                child: Image.asset("assets/nodata.png",width: 300,),
+              ),
+            );
+          }
           return new ListView(
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               return new Column(
