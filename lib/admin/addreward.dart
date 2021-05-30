@@ -11,15 +11,17 @@ import 'package:http/http.dart';
 
 
 class AddReward extends StatefulWidget {
-  var email;
-  AddReward(e){this.email=e;}
+  var email,company;
+  AddReward(e,c){this.email=e;    this.company=c;
+  }
   @override
-  _AddTaskState createState() => _AddTaskState(this.email);
+  _AddTaskState createState() => _AddTaskState(this.email,this.company);
 }
 
 class _AddTaskState extends State<AddReward> {
   var email,company,_assignedto,type;
-  _AddTaskState(e){this.email=e; _getallworkers();print(company);print(email);}
+  _AddTaskState(e,c){this.email=e;    this.company=c;
+  _getallworkers();print(company);print(email);}
   var _progress=false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _title = TextEditingController();
@@ -186,6 +188,7 @@ class _AddTaskState extends State<AddReward> {
 
     // Toast.show("Task is uploaded",context,duration: Toast.LENGTH_SHORT, gravity:  Toast.TOP);
     Navigator.pop(context);
+    Navigator.pop(context);
 
   }
 
@@ -344,7 +347,7 @@ var topic3=_assignedto.replaceAll('@',"");
                   child: DropdownButton(
 
                     isExpanded: true,
-                    hint: Text('Gift Type'),
+                    hint: Text('Reward Type'),
                     value: type,
                     items: giftdropdown
                         .map((e) =>

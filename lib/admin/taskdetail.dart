@@ -108,6 +108,17 @@ class _TaskDetailsState extends State<TaskDetailsInAdmin> {
               SizedBox(height: 20,),
               ListTile(
                 title: Text(
+                  "Task ID",
+                  style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                ),
+                subtitle: Text(
+                  snapshot.data['id'],
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: Text(
                   "Task Title",
                   style: TextStyle(color: Colors.teal, fontSize: 12.0),
                 ),

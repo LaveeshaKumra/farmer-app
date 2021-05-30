@@ -22,6 +22,7 @@ class _AddTaskState extends State<AddTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
+  final TextEditingController _id = TextEditingController();
 
   bool _success;
 
@@ -159,6 +160,7 @@ var topic3=_assignedto.replaceAll('@',"");
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("tasks")
         .add({
+      'id':_id.text,
       'title': _title.text,
       'description':_description.text,
       'company':company,
@@ -173,7 +175,6 @@ var topic3=_assignedto.replaceAll('@',"");
 
       //await sendAndRetrieveMessage('${list1[i]}-Vrinda');
       //_showdialog(context);
-print("pppppppppp");
        Toast.show("Task is added",context,duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
        _sendnotification();
       setState(() {
@@ -191,6 +192,11 @@ var allnames,allemails;
   _getallworkers() async {
     var val;
     final databaseReference = FirebaseFirestore.instance;
+    await databaseReference.collection("tasks").get().then((val){
+      setState(() {
+        _id.text=(val.docs.length+1).toString();
+      });
+    });
     await databaseReference.collection("users").where('company',isEqualTo: company).where('status',isEqualTo: 'Accepted').where('role',isEqualTo: 'farmer').get().then(
             (value) {val = value;
         });
@@ -251,6 +257,25 @@ var allnames,allemails;
           padding: const EdgeInsets.all(25.0),
           child: ListView(
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              Material(
+                color: Colors.grey[200],
+                elevation: 2.0,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                child: TextFormField(
+                  controller: _id,
+             enabled: false,
+                  cursorColor: Colors.teal,
+                  decoration: InputDecoration(
+                      hintText: "Task ID",
+
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 13)),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -407,25 +432,37 @@ var allnames,allemails;
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        child: RoundedButton2(
-                          text: _starttime==null?"Starting time":_starttime.format(context),
-                          state: false,
-                          color: _startcolor==false?Colors.grey:Colors.teal,
-                          press: () {
-                            _selectstartingtime();
-                          },
+                        child: Column(
+                          children: [
+                            Text("Starting Time"),
+
+                            RoundedButton2(
+                              text: _starttime==null?"Starting time":_starttime.format(context),
+                              state: false,
+                              color: _startcolor==false?Colors.grey:Colors.teal,
+                              press: () {
+                                _selectstartingtime();
+                              },
+                            ),
+                          ],
                         ),
                       ),
 
                       Padding(padding: EdgeInsets.only(left: 8)),
                       Container(
-                        child: RoundedButton2(
-                          text: _endtime==null?"Ending time":_endtime.format(context),
-                          state: false,
-                          color: _endcolor==false?Colors.grey:Colors.teal,
-                          press: () {
-                            _selectendingtime();
-                          },
+                        child: Column(
+                          children: [
+                            Text("Ending Time"),
+
+                            RoundedButton2(
+                              text: _endtime==null?"Ending time":_endtime.format(context),
+                              state: false,
+                              color: _endcolor==false?Colors.grey:Colors.teal,
+                              press: () {
+                                _selectendingtime();
+                              },
+                            ),
+                          ],
                         ),
                       ),
 
@@ -538,21 +575,25 @@ class RoundedButton2 extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: size.width * 0.4,
+      width: size.width * 0.38,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: FlatButton(
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
           color: color,
           onPressed: press,
-          child: state
-              ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          child: Column(
+            children: [
+              state
+                  ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+                  : Text(
+                text,
+                style: TextStyle(color: textColor),
+              ),
+            ],
           )
-              : Text(
-            text,
-            style: TextStyle(color: textColor),
-          ),
         ),
       ),
     );

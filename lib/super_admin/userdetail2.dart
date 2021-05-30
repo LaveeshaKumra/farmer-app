@@ -93,14 +93,19 @@ class _UserDetailState2 extends State<UserDetail2> {
                       ),
                       Divider(),
                       ListTile(
-                        title: Text(
-                          "Role",
-                          style: TextStyle(color: Colors.teal, fontSize: 12.0),
-                        ),
-                        subtitle: Text(
-                          d['role'],
-                          style: TextStyle(fontSize: 18.0),
-                        ),
+                          title: Text(
+                            "Role",
+                            style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                          ),
+                          subtitle: d['role']=="admin"?Text(
+                            "Farmer",
+
+                            style: TextStyle(fontSize: 18.0),
+                          ):Text(
+                            "Worker",
+
+                            style: TextStyle(fontSize: 18.0),
+                          )
                       ),
 
                       Divider(),

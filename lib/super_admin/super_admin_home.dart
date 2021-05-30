@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_boom_menu/flutter_boom_menu.dart';
 
 class SuperAdminHome extends StatefulWidget {
 
@@ -57,7 +58,7 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
 
   }
 
-  Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed2() {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -78,35 +79,6 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
         false;
   }
 
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: Scaffold(
-        drawer: NavDrawer(),
-        appBar: AppBar(
-          title: Text("All Tasks"),
-
-        ),
-        body: AllTasks(),
-      ),
-    );
-  }
-}
-
-
-class NavDrawer extends StatefulWidget {
-
-
-  @override
-  _NavDrawerState createState() =>
-      _NavDrawerState();
-}
-
-class _NavDrawerState extends State<NavDrawer> {
 
 
   var firebase = FirebaseAuth.instance;
@@ -136,90 +108,156 @@ class _NavDrawerState extends State<NavDrawer> {
 
   _logout() async {
     await firebase.signOut().then((value) {
-    FirebaseMessaging.instance.unsubscribeFromTopic('superadmin');
+      FirebaseMessaging.instance.unsubscribeFromTopic('superadmin');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
               (Route<dynamic> route) => false);
     });
   }
-
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        // padding: EdgeInsets.zero,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              child: DrawerHeader(
-                child: Text(
-                  '',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                ),
-                decoration: BoxDecoration(
-                  //color: Colors.green,
-                    image: DecorationImage(
-                        fit: BoxFit.contain,
-                        image: AssetImage('assets/male.png')
-                            )),
-              ),
-              onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ProfilePage(email)),
-                // );
-              },
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.calendar_today_rounded),
-            title: Text('All Tasks'),
-            onTap: () => {Navigator.of(context).pop()},
-          ),
-          ListTile(
-            leading: Icon(Icons.people),
-            title: Text('Team'),
-            onTap: () =>
-            {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TeamsScreen()),
-              )
-            },
-          ),
 
 
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Farmer\'s Requests'),
-            onTap: () =>
-            {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RequestsScreen()),
-              )
-            },
-          ),
-          // ListTile(
-          //   leading: Icon(Icons.image),
-          //   title: Text('Change Image'),
-          //   onTap: () =>
-          //   {
-          //     // Navigator.push(
-          //     //   context,
-          //     //   MaterialPageRoute(builder: (context) => RequestsScreen()),
-          //     // )
-          //   },
-          // ),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () => {_onBackPressed()},
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: _onBackPressed2,
+      child: Scaffold(
+
+       floatingActionButton:BoomMenu(
+         animatedIcon: AnimatedIcons.menu_close,
+         animatedIconTheme: IconThemeData(size: 22.0),
+         scrollVisible: true,
+         overlayColor: Colors.black,
+         overlayOpacity: 0.7,
+         children: [
+           MenuItem(
+             child: Icon(Icons.people, color: Colors.black),
+             title: "View Team Details",
+             subtitle: "",
+             onTap: () =>    Navigator.push(
+               context,
+               MaterialPageRoute(
+                   builder: (context) => TeamsScreen()),
+             )
+           ),
+           MenuItem(
+             child: Icon(Icons.person_add_alt_1, color: Colors.black),
+             title: "Farmer ID Request",
+             subtitle: "",
+             onTap: () =>   Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => RequestsScreen()),
+             )
+           ),
+           MenuItem(
+               child: Icon(Icons.logout, color: Colors.black),
+               title: "Logout",
+               subtitle: "",
+               onTap: () =>   _onBackPressed()
+           ),
+
+
+         ],
+       ),
+
+        //drawer: NavDrawer(),
+        appBar: AppBar(
+          title: Text("All Tasks"),
+
+        ),
+        body: AllTasks(),
       ),
     );
   }
 }
+
+
+// class NavDrawer extends StatefulWidget {
+//
+//
+//   @override
+//   _NavDrawerState createState() =>
+//       _NavDrawerState();
+// }
+// class _NavDrawerState extends State<NavDrawer> {
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Drawer(
+//       child: ListView(
+//         // padding: EdgeInsets.zero,
+//         children: <Widget>[
+//           Padding(
+//             padding: const EdgeInsets.all(8.0),
+//             child: InkWell(
+//               child: DrawerHeader(
+//                 child: Text(
+//                   '',
+//                   style: TextStyle(color: Colors.white, fontSize: 25),
+//                 ),
+//                 decoration: BoxDecoration(
+//                   //color: Colors.green,
+//                     image: DecorationImage(
+//                         fit: BoxFit.contain,
+//                         image: AssetImage('assets/male.png')
+//                             )),
+//               ),
+//               onTap: () {
+//                 // Navigator.push(
+//                 //   context,
+//                 //   MaterialPageRoute(builder: (context) => ProfilePage(email)),
+//                 // );
+//               },
+//             ),
+//           ),
+//           ListTile(
+//             leading: Icon(Icons.calendar_today_rounded),
+//             title: Text('All Tasks'),
+//             onTap: () => {Navigator.of(context).pop()},
+//           ),
+//           ListTile(
+//             leading: Icon(Icons.people),
+//             title: Text('Team'),
+//             onTap: () =>
+//             {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                     builder: (context) => TeamsScreen()),
+//               )
+//             },
+//           ),
+//
+//
+//           ListTile(
+//             leading: Icon(Icons.person),
+//             title: Text('Farmer\'s Requests'),
+//             onTap: () =>
+//             {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (context) => RequestsScreen()),
+//               )
+//             },
+//           ),
+//           // ListTile(
+//           //   leading: Icon(Icons.image),
+//           //   title: Text('Change Image'),
+//           //   onTap: () =>
+//           //   {
+//           //     // Navigator.push(
+//           //     //   context,
+//           //     //   MaterialPageRoute(builder: (context) => RequestsScreen()),
+//           //     // )
+//           //   },
+//           // ),
+//           ListTile(
+//             leading: Icon(Icons.exit_to_app),
+//             title: Text('Logout'),
+//             onTap: () => {_onBackPressed()},
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

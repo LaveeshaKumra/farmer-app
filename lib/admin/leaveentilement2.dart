@@ -36,8 +36,9 @@ class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
       appBar: AppBar(
         title: Text("Leave Entitlement"),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        icon:  Icon(Icons.add),
+        label: Text("Add Leave Entitlement"),
         onPressed: (){
           Navigator.push(
             context,

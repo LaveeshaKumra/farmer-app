@@ -33,7 +33,7 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _title = TextEditingController();
   List<String> giftdropdown=[
-    "Hospitalisation leave","Emergency Leave","Maternity Leave","Paternity Leave","Compassionate Leave"
+    "Hospitalisation leave","Emergency Leave","Maternity Leave","Paternity Leave","Compassionate Leave","Annual Leave","Sick Leave","Others"
   ];
   bool isNumericUsingRegularExpression(String string) {
     final numericRegex =

@@ -26,6 +26,7 @@ dependencies:
   start_chart: ^0.2.0
   flutter_launcher_icons:
   flutter_boom_menu: ^1.0.2
+  provider:
 
 
 
@@ -47,12 +48,13 @@ flutter:
     - assets/male.png
     - assets/icons/
 
+
 flutter_icons:
-  image_path: "assets/code.png"
-  image_path_ios: "assets/code.png"
+  image_path: "assets/ROMPIN.png"
+  image_path_ios: "assets/ROMPIN.png"
   android: true
   ios: true
   remove_alpha_ios: true
-  adaptive_icon_background: "assets/code.png"
-  adaptive_icon_foreground: "assets/code.png"
+  adaptive_icon_background: "assets/ROMPIN.png"
+  adaptive_icon_foreground: "assets/ROMPIN.png"
   #  run flutter packages pub run flutter_launcher_icons:main

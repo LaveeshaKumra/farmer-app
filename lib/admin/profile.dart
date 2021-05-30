@@ -230,7 +230,7 @@ var genders=["Male","Female","Others"];
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       child: TextFormField(
                         // controller: _emailController,
-
+enabled: false,
                         keyboardType: TextInputType.emailAddress,
                         cursorColor: Colors.teal,
                         decoration: InputDecoration(

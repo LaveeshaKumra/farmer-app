@@ -74,7 +74,17 @@ class _TaskDetailsState extends State<TaskDetails> {
       )
           : ListView(
         children: <Widget>[
-
+          ListTile(
+            title: Text(
+              "Task ID",
+              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+            ),
+            subtitle: Text(
+              data['id'],
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+          Divider(),
           ListTile(
             title: Text(
               "Task Title",

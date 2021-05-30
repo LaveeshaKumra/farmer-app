@@ -44,7 +44,7 @@ class _ReportPageState extends State<UserReportChart> {
     _seriesBarData.add(
       charts.Series(
         domainFn: (Data sales, _) => sales.month.substring(0,3),
-        measureFn: (Data sales, _) => sales.hours,
+        measureFn: (Data sales, _) => sales.hours/60,
         colorFn: (Data sales, _) =>
             charts.ColorUtil.fromDartColor(Colors.teal),
         id: "Report",
@@ -94,7 +94,7 @@ class _ReportPageState extends State<UserReportChart> {
                 if(documentSnapshot.data()['in_time'].toDate().year==DateTime.now().year){
                   print("in 1");
                   print(monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]);
-                  monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]=monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]+(documentSnapshot.data()['out_time'].toDate()).difference(documentSnapshot.data()['in_time'].toDate()).inHours;
+                  monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]=monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]+(documentSnapshot.data()['out_time'].toDate()).difference(documentSnapshot.data()['in_time'].toDate()).inMinutes;
                   //x={ 'month':_convertmonth(documentSnapshot.data()['in_time'].toDate()),'hours':monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]};
                 }
 

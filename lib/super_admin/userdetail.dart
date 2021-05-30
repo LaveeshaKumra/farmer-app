@@ -60,9 +60,7 @@ class _UserDetailState extends State<UserDetail> {
       floatingActionButton: data['role']=='admin'?Container():BoomMenu(
         animatedIcon: AnimatedIcons.menu_close,
         animatedIconTheme: IconThemeData(size: 22.0),
-        //child: Icon(Icons.add),
-        onOpen: () => print('OPENING DIAL'),
-        onClose: () => print('DIAL CLOSED'),
+
         scrollVisible: true,
         overlayColor: Colors.black,
         overlayOpacity: 0.7,
@@ -127,7 +125,7 @@ class _UserDetailState extends State<UserDetail> {
             backgroundColor: Colors.deepPurpleAccent,
             onTap: () =>  Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddReward(data['email'])),
+              MaterialPageRoute(builder: (context) => AddReward(data['email'],data['company'])),
             ),
           )
         ],
