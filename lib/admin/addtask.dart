@@ -44,9 +44,9 @@ class _AddTaskState extends State<AddTask> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -79,9 +79,9 @@ class _AddTaskState extends State<AddTask> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -267,7 +267,7 @@ var allnames,allemails;
                 child: TextFormField(
                   controller: _id,
              enabled: false,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Task ID",
 
@@ -291,7 +291,7 @@ var allnames,allemails;
                     }
                     return null;
                   },
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Task Title",
 
@@ -309,7 +309,7 @@ var allnames,allemails;
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
                   controller: _description,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   minLines: 1,
                   maxLines: 20,
                   decoration: InputDecoration(
@@ -383,7 +383,7 @@ var allnames,allemails;
                 _selectDate(context);
               },
 
-              cursorColor: Colors.teal,
+              cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
                   hintText: "Starting Date",
                   border: InputBorder.none,
@@ -412,7 +412,7 @@ var allnames,allemails;
                     _selectDate2(context);
                   },
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Ending Date",
                       border: InputBorder.none,
@@ -439,7 +439,7 @@ var allnames,allemails;
                             RoundedButton2(
                               text: _starttime==null?"Starting time":_starttime.format(context),
                               state: false,
-                              color: _startcolor==false?Colors.grey:Colors.teal,
+                              color: _startcolor==false?Colors.grey:Theme.of(context).primaryColor,
                               press: () {
                                 _selectstartingtime();
                               },
@@ -457,7 +457,7 @@ var allnames,allemails;
                             RoundedButton2(
                               text: _endtime==null?"Ending time":_endtime.format(context),
                               state: false,
-                              color: _endcolor==false?Colors.grey:Colors.teal,
+                              color: _endcolor==false?Colors.grey:Theme.of(context).primaryColor,
                               press: () {
                                 _selectendingtime();
                               },
@@ -480,6 +480,7 @@ var allnames,allemails;
                   child: RoundedButton(
                     text: "Add Task",
                     state: _progress,
+                    color: Theme.of(context).primaryColor,
                     press: () {
 
                       // if(_assignedto==null){
@@ -526,7 +527,7 @@ class RoundedButton extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color ,
     this.textColor = Colors.white,
   }) : super(key: key);
 

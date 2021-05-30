@@ -91,9 +91,9 @@ class _AddTaskState extends State<AddReward> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -126,9 +126,9 @@ class _AddTaskState extends State<AddReward> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -282,7 +282,7 @@ var topic3=_assignedto.replaceAll('@',"");
                   },
                   minLines: 1,
                   maxLines: 5,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Reward Title",
 
@@ -372,6 +372,7 @@ var topic3=_assignedto.replaceAll('@',"");
                   child: RoundedButton(
                     text: "Send Reward",
                     state: _progress,
+                    color: Theme.of(context).primaryColor,
                     press: () {
 
                       // if(_assignedto==null){
@@ -418,7 +419,7 @@ class RoundedButton extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color,
     this.textColor = Colors.white,
   }) : super(key: key);
 

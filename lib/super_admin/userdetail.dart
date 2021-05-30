@@ -156,7 +156,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "User Name",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['username'],
@@ -167,7 +167,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Email id",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['email'],
@@ -178,7 +178,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Mobile no.",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['mobileno'],
@@ -189,7 +189,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Company",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['company'],
@@ -200,7 +200,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Role",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['role']=="admin"?"Farmer":"Worker",
@@ -211,7 +211,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Gender",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['gender'],
@@ -222,7 +222,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Date of Birth",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['dateofbirth'].toDate()),
@@ -233,7 +233,7 @@ class _UserDetailState extends State<UserDetail> {
           ListTile(
             title: Text(
               "Address",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['address'],

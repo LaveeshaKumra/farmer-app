@@ -79,7 +79,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "User Name",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['username'],
@@ -90,7 +90,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "TimeOff Reason",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['title'],
@@ -101,7 +101,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           data['description']==""?Container():ListTile(
             title: Text(
               "Message",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['description'],
@@ -112,7 +112,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "Email id",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['email'],
@@ -123,7 +123,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "Company",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['company'],
@@ -134,7 +134,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "From",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['start_date'].toDate()),
@@ -145,7 +145,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "To",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['end_date'].toDate()),
@@ -156,7 +156,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
           ListTile(
             title: Text(
               "Status",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['status'],

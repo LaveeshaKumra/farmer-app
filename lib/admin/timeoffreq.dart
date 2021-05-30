@@ -164,7 +164,7 @@ await databaseReference
           ListTile(
             title: Text(
               "User Name",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['username'],
@@ -175,7 +175,7 @@ await databaseReference
           ListTile(
             title: Text(
               "Leave Reason",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['title'],
@@ -186,7 +186,7 @@ await databaseReference
           data['description']==""?Container():ListTile(
             title: Text(
               "Note",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['description'],
@@ -197,7 +197,7 @@ await databaseReference
           ListTile(
             title: Text(
               "Email id",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['email'],
@@ -208,7 +208,7 @@ await databaseReference
           ListTile(
             title: Text(
               "Company",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['company'],
@@ -219,7 +219,7 @@ await databaseReference
           ListTile(
             title: Text(
               "From",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['start_date'].toDate()),
@@ -230,7 +230,7 @@ await databaseReference
           ListTile(
             title: Text(
               "To",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['end_date'].toDate()),

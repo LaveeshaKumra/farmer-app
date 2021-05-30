@@ -111,7 +111,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           return null;
                         },
                         keyboardType: TextInputType.emailAddress,
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "Email id",
 
@@ -128,6 +128,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       child: RoundedButton(
                         text: "Send",
                         state: _progress,
+                        color: Theme.of(context).primaryColor,
                         press: () {
                           if (_formKey.currentState.validate()) {
                             setState(() {
@@ -158,7 +159,7 @@ class RoundedButton extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color,
     this.textColor = Colors.white,
   }) : super(key: key);
 

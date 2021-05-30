@@ -104,7 +104,7 @@ class _RewardsState extends State<Rewards> {
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 18,
-                            color: Colors.teal),
+                            color: Theme.of(context).primaryColor),
                       )),
                     ),
                 indexedItemBuilder: (context, document, int index) {

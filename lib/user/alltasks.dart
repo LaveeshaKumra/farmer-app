@@ -248,7 +248,7 @@ class _AllTasksState extends State<AllTasks> {
               groupHeaderBuilder: (element) =>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Center(child: Text(returnMonth(element['start_date'].toDate()),style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18,color: Colors.teal),)),
+                    child: Center(child: Text(returnMonth(element['start_date'].toDate()),style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18,color: Theme.of(context).primaryColor),)),
                   ),
               indexedItemBuilder: (context, snapshot, int index) {
                 return  Padding(

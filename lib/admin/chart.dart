@@ -46,7 +46,7 @@ class _ReportPageState extends State<UserReportChart> {
         domainFn: (Data sales, _) => sales.month.substring(0,3),
         measureFn: (Data sales, _) => sales.hours/60,
         colorFn: (Data sales, _) =>
-            charts.ColorUtil.fromDartColor(Colors.teal),
+            charts.ColorUtil.fromDartColor(Theme.of(context).primaryColor),
         id: "Report",
         data: mydata,
         //domainLowerBoundFn: (Data sales, _) => sales.hours.toString(),

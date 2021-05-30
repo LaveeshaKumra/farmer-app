@@ -39,9 +39,9 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -91,7 +91,7 @@ class _HomePageFarmerState extends State<HomePageFarmer> {
               padding: EdgeInsets.all(20.0),
               height: MediaQuery.of(context).size.height * 0.1,
               decoration: BoxDecoration(
-                  color: Colors.teal,
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(15),
                       bottomRight: Radius.circular(15))),

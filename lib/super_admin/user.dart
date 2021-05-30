@@ -154,7 +154,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "User Name",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['username'],
@@ -165,7 +165,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Email id",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['email'],
@@ -176,7 +176,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Mobile no.",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['mobileno'],
@@ -187,7 +187,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Company",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['company'],
@@ -198,7 +198,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Role",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['role'],
@@ -209,7 +209,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Gender",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['gender'],
@@ -220,7 +220,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Date of Birth",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
     _convertdate(data['dateofbirth'].toDate()),
@@ -231,7 +231,7 @@ var topic3=data['email'].replaceAll('@',"");
                 ListTile(
                   title: Text(
                     "Address",
-                    style: TextStyle(color: Colors.teal, fontSize: 12.0),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
                   ),
                   subtitle: Text(
                     data['address'],
@@ -255,7 +255,7 @@ class RoundedButton2 extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color ,
     this.textColor = Colors.white,
   }) : super(key: key);
 

@@ -249,7 +249,7 @@ class _Calendar2State extends State<TaskCalendar> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             //color: Colors.orange,
-            border: Border.all(color: Colors.teal),
+            border: Border.all(color: Theme.of(context).primaryColor),
           ),
           child: new Text(
             (dayNumber - _beginMonthPadding).toString(),
@@ -323,7 +323,7 @@ class _Calendar2State extends State<TaskCalendar> {
       //     "$eventtitle",
       //     maxLines: 2,
       //     style: new TextStyle(fontWeight: FontWeight.normal,
-      //         background: Paint()..color = Colors.tealAccent),
+      //         background: Paint()..color = Theme.of(context).primaryColorAccent),
       //   ),
       // );
     } else {

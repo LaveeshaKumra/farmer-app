@@ -100,7 +100,7 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
                   },
                   minLines: 1,
                   maxLines: 5,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Enter number of leave entitlement",
 

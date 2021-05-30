@@ -307,7 +307,7 @@ class _Calendar2State extends State<Calendar> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             //color: Colors.orange,
-            border: Border.all(color: Colors.teal),
+            border: Border.all(color: Theme.of(context).primaryColor),
           ),
           child: new Text(
             (dayNumber - _beginMonthPadding).toString(),

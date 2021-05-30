@@ -59,9 +59,9 @@ class _ProfilePageState extends State<MyProfilePage> {
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -264,7 +264,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                     }
                     return null;
                   },
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "User name",
 
@@ -284,7 +284,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                   // controller: _emailController,
 
                   keyboardType: TextInputType.emailAddress,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: _emailController.text,
 
@@ -304,7 +304,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                   controller: _mobileno,
 
                   keyboardType: TextInputType.number,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Mobile No",
 
@@ -354,7 +354,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                     _selectDate(context);
                   },
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Date of Birth",
                       border: InputBorder.none,
@@ -378,7 +378,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                     }
                     return null;
                   },
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Address",
                       border: InputBorder.none,
@@ -397,7 +397,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                   enabled: false,
                   //controller: _companyid,
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
 
                   decoration: InputDecoration(
                       hintText: _companyid.text,
@@ -419,7 +419,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                     enabled: false,
                     //controller: _jobtitle,
 
-                    cursorColor: Colors.teal,
+                    cursorColor: Theme.of(context).primaryColor,
                     decoration: InputDecoration(
                         hintText: _jobtitle.text,
                         border: InputBorder.none,

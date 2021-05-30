@@ -77,7 +77,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Task ID",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['id'],
@@ -88,7 +88,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Task Title",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['title'],
@@ -99,7 +99,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Task Description",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['description'],
@@ -110,7 +110,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Company",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['company'],
@@ -121,7 +121,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Starting Date",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['start_date'].toDate()),
@@ -132,7 +132,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Starting Time",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['start_time'],
@@ -143,7 +143,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Ending Date",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               _convertdate(data['end_date'].toDate()),
@@ -154,7 +154,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Starting Time",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
               data['end_time'],
@@ -165,7 +165,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Assigned By",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
              manager!=null?manager:"",
@@ -182,7 +182,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           ListTile(
             title: Text(
               "Assigned To",
-              style: TextStyle(color: Colors.teal, fontSize: 12.0),
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
             subtitle: Text(
                 user!=null?user:"",

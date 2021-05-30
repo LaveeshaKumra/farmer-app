@@ -139,9 +139,9 @@ var topic3=assigned_to.replaceAll('@',"");
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -175,9 +175,9 @@ var topic3=assigned_to.replaceAll('@',"");
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -355,7 +355,7 @@ var _stime,_etime;
                     }
                     return null;
                   },
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Task Title",
 
@@ -373,7 +373,7 @@ var _stime,_etime;
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
                   controller: _description,
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   minLines: 1,
                   maxLines: 20,
                   decoration: InputDecoration(
@@ -447,7 +447,7 @@ var _stime,_etime;
                     _selectDate(context);
                   },
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Starting Date",
                       border: InputBorder.none,
@@ -476,7 +476,7 @@ var _stime,_etime;
                     _selectDate2(context);
                   },
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: "Ending Date",
                       border: InputBorder.none,
@@ -560,7 +560,7 @@ var _stime,_etime;
                 child: TextFormField(
                  // controller: _title,
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: company.text,
 

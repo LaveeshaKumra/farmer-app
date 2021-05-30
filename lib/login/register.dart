@@ -238,9 +238,9 @@ var serverToken="AAAAwaoyCQk:APA91bGBDoI9m0Ih3cEeEUVTMY6JtrV2xy2nKI88OcRXd6Pj3ee
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -308,7 +308,7 @@ formOneBuilder(BuildContext context) {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("STEP 1 : Enter Personal Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.teal),)
+                            child: Text("STEP 1 : Enter Personal Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Theme.of(context).primaryColor),)
                         ),
                       ),
                       SizedBox(
@@ -326,7 +326,7 @@ formOneBuilder(BuildContext context) {
                             }
                             return null;
                           },
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "User name",
 
@@ -351,7 +351,7 @@ formOneBuilder(BuildContext context) {
                             return null;
                           },
                           keyboardType: TextInputType.emailAddress,
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "Email id",
 
@@ -433,7 +433,7 @@ formOneBuilder(BuildContext context) {
                             _selectDate(context);
                           },
 
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "Date of Birth",
                               border: InputBorder.none,
@@ -457,7 +457,7 @@ formOneBuilder(BuildContext context) {
                             }
                             return null;
                           },
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "Address",
                               border: InputBorder.none,
@@ -473,6 +473,7 @@ formOneBuilder(BuildContext context) {
                     child: RoundedButton(
                       text: "Next",
                       state: false,
+                      color: Theme.of(context).primaryColor,
                       press: () {
                         if (_formKey1.currentState.validate()) {
                           saveData1(context);
@@ -533,7 +534,7 @@ formOneBuilder(BuildContext context) {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("STEP 2 : Enter Job Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.teal)),
+                          child: Text("STEP 2 : Enter Job Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Theme.of(context).primaryColor)),
                         ),
                       ),
                       SizedBox(
@@ -551,7 +552,7 @@ formOneBuilder(BuildContext context) {
                             }
                             return null;
                           },
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "Company",
                               border: InputBorder.none,
@@ -603,6 +604,7 @@ formOneBuilder(BuildContext context) {
                                 child: RoundedButton2(
                                   text: "Previous",
                                   state: false,
+                                  color: Theme.of(context).primaryColor,
                                   press: () {
                                     previousPage(context);
                                   },
@@ -614,6 +616,7 @@ formOneBuilder(BuildContext context) {
                                 child: RoundedButton2(
                                   text: "Next",
                                   state: false,
+                                  color: Theme.of(context).primaryColor,
                                   press: () {
                                     if (_formKey2.currentState.validate()) {
                                       saveData2(context);nextPage(context);
@@ -679,7 +682,7 @@ formOneBuilder(BuildContext context) {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("STEP 3 : Set Password ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Colors.teal)),
+                          child: Text("STEP 3 : Set Password ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Theme.of(context).primaryColor)),
                         ),
                       ),
                       SizedBox(
@@ -698,7 +701,7 @@ formOneBuilder(BuildContext context) {
                               return "Password Doesn't Match";
                             return null;
                           },
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           obscureText: true,
                           decoration: InputDecoration(
                               hintText: "Password",
@@ -723,7 +726,7 @@ formOneBuilder(BuildContext context) {
                               return "Password Doesn't Match";
                             return null;
                           },
-                          cursorColor: Colors.teal,
+                          cursorColor: Theme.of(context).primaryColor,
                           obscureText: true,
                           decoration: InputDecoration(
                               hintText: "Confirm Password",
@@ -746,6 +749,7 @@ formOneBuilder(BuildContext context) {
                                 child: RoundedButton(
                                   text: "Previous",
                                   state: false,
+                                  color: Theme.of(context).primaryColor,
                                   press: () {
                                     previousPage(context);
                                   },
@@ -763,6 +767,7 @@ formOneBuilder(BuildContext context) {
                     child: RoundedButton(
                       text: "Sign up",
                       state: _progress,
+                      color: Theme.of(context).primaryColor,
                       press: () {
                         if (_formKey3.currentState.validate()) {
                           setState(() {
@@ -843,7 +848,7 @@ class RoundedButton extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color ,
     this.textColor = Colors.white,
   }) : super(key: key);
 
@@ -883,7 +888,7 @@ Key key,
 this.text,
 this.state,
 this.press,
-this.color = Colors.teal,
+this.color ,
 this.textColor = Colors.white,
 }) : super(key: key);
 

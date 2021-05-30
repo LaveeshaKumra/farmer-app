@@ -160,7 +160,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: NavDrawer(image, company, email),
-      appBar: AppBar(title: Text("Farmer's Page"),backgroundColor: Colors.blue,actions: [
+      appBar: AppBar(title: Text("Farmer's Page"),backgroundColor: Theme.of(context).primaryColor,actions: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(onTap:(){_onBackPressed ();},child: Icon(Icons.logout)),

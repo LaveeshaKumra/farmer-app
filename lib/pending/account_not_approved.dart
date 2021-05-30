@@ -86,7 +86,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
         actions: [
         Container(
           child: FlatButton(
-            splashColor: Colors.teal,
+            splashColor: Theme.of(context).primaryColor,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -120,14 +120,14 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
               alignment: Alignment.center,
               child: Text(
                 "Your Account is not yet Approved",
-                style: TextStyle(fontSize: 25.9, fontWeight: FontWeight.bold,color: Colors.teal[900]),
+                style: TextStyle(fontSize: 25.9, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
                 textAlign: TextAlign.center,
               ),
             ):Container(
               alignment: Alignment.center,
               child: Text(
                 "Your Account has been Rejected",
-                style: TextStyle(fontSize: 25.9, fontWeight: FontWeight.bold,color: Colors.teal[900]),
+                style: TextStyle(fontSize: 25.9, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -138,7 +138,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
               alignment: Alignment.center,
               child: Text(
                 "Contact Your Manager",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold,color: Colors.teal),
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold,color: Theme.of(context).primaryColor),
               ),
             ),
             SizedBox(

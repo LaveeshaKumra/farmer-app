@@ -173,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         keyboardType: TextInputType.emailAddress,
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "Email id",
 
@@ -197,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         obscureText: true,
                         decoration: InputDecoration(
                             hintText: "Password",
@@ -226,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: RoundedButton(
                         text: "Login",
                         state: _progress,
+                        color: Theme.of(context).primaryColor,
                         press: () {
                           if (_formKey.currentState.validate()) {
                             setState(() {
@@ -280,7 +281,7 @@ class RoundedButton extends StatelessWidget {
     this.text,
     this.state,
     this.press,
-    this.color = Colors.teal,
+    this.color ,
     this.textColor = Colors.white,
   }) : super(key: key);
 

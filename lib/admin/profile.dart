@@ -59,9 +59,9 @@ var genders=["Male","Female","Others"];
           return Theme(
             data: ThemeData.dark().copyWith(
               colorScheme: ColorScheme.dark(
-                primary: Colors.teal,
+                primary: Theme.of(context).primaryColor,
                 onPrimary: Colors.white,
-                surface: Colors.teal,
+                surface: Theme.of(context).primaryColor,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.grey[100],
@@ -212,7 +212,7 @@ var genders=["Male","Female","Others"];
                           }
                           return null;
                         },
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "User name",
 
@@ -232,7 +232,7 @@ var genders=["Male","Female","Others"];
                         // controller: _emailController,
 enabled: false,
                         keyboardType: TextInputType.emailAddress,
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: _emailController.text,
 
@@ -252,7 +252,7 @@ enabled: false,
                         controller: _mobileno,
 
                         keyboardType: TextInputType.number,
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "Mobile No",
 
@@ -302,7 +302,7 @@ enabled: false,
                           _selectDate(context);
                         },
 
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "Date of Birth",
                             border: InputBorder.none,
@@ -326,7 +326,7 @@ enabled: false,
                           }
                           return null;
                         },
-                        cursorColor: Colors.teal,
+                        cursorColor: Theme.of(context).primaryColor,
                         decoration: InputDecoration(
                             hintText: "Address",
                             border: InputBorder.none,
@@ -345,7 +345,7 @@ enabled: false,
                 enabled: false,
                 //controller: _companyid,
 
-                cursorColor: Colors.teal,
+                cursorColor: Theme.of(context).primaryColor,
 
                 decoration: InputDecoration(
                     hintText: _companyid.text,
@@ -367,7 +367,7 @@ enabled: false,
                   enabled: false,
                   //controller: _jobtitle,
 
-                  cursorColor: Colors.teal,
+                  cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
                       hintText: _jobtitle.text=="admin"?"Farmer":"Worker",
                       border: InputBorder.none,
