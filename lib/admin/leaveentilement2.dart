@@ -136,9 +136,9 @@ class _LeaveEntilementUserState extends State<LeaveEntitlementUser> {
                                         .difference(snapshot2.data.docs[i]
                                             .data()['start_date']
                                             .toDate())
-                                        .inHours;
+                                        .inDays;
                                   }
-                                  days = hours / 24;
+                                  days = hours +1;
                                   return Text(
                                       "${int.parse(values[index]) - days.ceil()} / ${values[index]} days leave remaining");
                                 }

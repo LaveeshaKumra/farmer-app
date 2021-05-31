@@ -7,6 +7,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boom_menu/flutter_boom_menu.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Theme.dart';
 
 class SuperAdminHome extends StatefulWidget {
 
@@ -83,7 +87,7 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
 
   var firebase = FirebaseAuth.instance;
 
-  Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed(context) {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -97,7 +101,7 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
             child: new Text('No'),
           ),
           new FlatButton(
-            onPressed: () => _logout(),
+            onPressed: () => _logout(context),
             child: new Text('Yes'),
           ),
         ],
@@ -106,9 +110,14 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
         false;
   }
 
-  _logout() async {
-    await firebase.signOut().then((value) {
+  _logout(context) async {
+    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
+
+    await firebase.signOut().then((value) async {
       FirebaseMessaging.instance.unsubscribeFromTopic('superadmin');
+      var prefs=await  SharedPreferences.getInstance();
+      prefs.setString("theme", "tealTheme");
+      themeNotifier.setTheme(tealTheme);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
               (Route<dynamic> route) => false);
@@ -152,7 +161,7 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
                child: Icon(Icons.logout, color: Colors.black),
                title: "Logout",
                subtitle: "",
-               onTap: () =>   _onBackPressed()
+               onTap: () =>   _onBackPressed(context)
            ),
 
 

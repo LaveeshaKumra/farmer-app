@@ -12,7 +12,7 @@ class AllRewards extends StatefulWidget {
 
   }
   @override
-  _RewardsState createState() => _RewardsState(this.email,    this.company);
+  _RewardsState createState() => _RewardsState(this.email,    this.company );
 }
 
 class _RewardsState extends State<AllRewards> {
@@ -26,8 +26,13 @@ class _RewardsState extends State<AllRewards> {
     final String formatted = formatter.format(d);
     return formatted;
   }
-
-  Future<bool> rewardialog(title, from, date, type) {
+_Delete(id) async {
+  final databaseReference = FirebaseFirestore.instance;
+  await databaseReference.collection("rewards").doc(id).delete().then((value) {
+    Navigator.pop(context,true);
+  });
+}
+  Future<bool> rewardialog(title, from, date, type,id) {
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
@@ -35,6 +40,13 @@ class _RewardsState extends State<AllRewards> {
             content: new Text(
                 "Reward Type : $type\n\nSent by : $from\n\nDate : ${_convertdate(date.toDate())}"),
             actions: <Widget>[
+              new FlatButton(
+                onPressed: () {
+                  print(id);
+                  _Delete(id);
+                },
+                child: new Text('Delete',style: TextStyle(color: Colors.red),),
+              ),
               new FlatButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -150,7 +162,7 @@ class _RewardsState extends State<AllRewards> {
                         ),
                         onTap: () {
                           rewardialog(document.data()['name'], user,
-                              document.data()['date'], document.data()['type']);
+                              document.data()['date'], document.data()['type'],document.id);
                         },
                       ),
                     );

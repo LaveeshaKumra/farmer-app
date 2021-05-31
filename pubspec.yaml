@@ -23,10 +23,11 @@ dependencies:
   async:
   grouped_list: ^4.0.0
   awesome_dialog:
-  start_chart: ^0.2.0
   flutter_launcher_icons:
   flutter_boom_menu: ^1.0.2
   provider:
+  firebase_storage:
+  image_picker:
 
 
 
@@ -50,11 +51,19 @@ flutter:
 
 
 flutter_icons:
-  image_path: "assets/ROMPIN.png"
-  image_path_ios: "assets/ROMPIN.png"
+  image_path: "assets/icon2.png"
+  image_path_ios: "assets/icon2.png"
   android: true
   ios: true
   remove_alpha_ios: true
-  adaptive_icon_background: "assets/ROMPIN.png"
-  adaptive_icon_foreground: "assets/ROMPIN.png"
+  adaptive_icon_background: "assets/icon2.png"
+  adaptive_icon_foreground: "assets/icon2.png"
+#
+#flutter_icons:
+#  ios: true
+#  android: true
+#  image_path_ios: "assets/ROMPIN.png"
+#  image_path_android: "assets/ROMPIN.png"
+#  adaptive_icon_background: "assets/background.png"
+#  adaptive_icon_foreground: "assets/foreground.png"
   #  run flutter packages pub run flutter_launcher_icons:main

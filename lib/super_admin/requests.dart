@@ -63,7 +63,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                 children: [
                   InkWell(
                     child: ListTile(
-                      leading: Icon(Icons.person),
+                      leading: document.data()['profile']==null || document.data()['profile']=="" ?Icon(Icons.person,size: 35,):Image.network(document.data()['profile'],width: 45,),
                       title: document.data()['username']==null?Text(''):Text(document.data()['username']),
                       subtitle: Text(document.data()['email']),
                       trailing: Text(document.data()['company']),

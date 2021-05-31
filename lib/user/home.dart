@@ -5,6 +5,9 @@ import 'package:farmers_app/user/attendance.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Theme.dart';
 import 'graph.dart';
 import 'rewards.dart';
 import 'alltasks.dart';
@@ -17,7 +20,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var image, company, email,name;
+  var image, company, email,name,profile;
   _MyHomePageState() {
     _getUser();
   }
@@ -35,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         company = val.docs[0]['company'];
         email = val.docs[0]['email'];
         name=val.docs[0]['username'];
+        profile=val.docs[0]['profile'];
       });
       if (val.docs[0]['gender'] == "Male") {
         setState(() {
@@ -109,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(image, company, email,name),
+      drawer: NavDrawer(image, company, email,name,profile),
       appBar: AppBar(title: Text("Hello $name"),
       actions: [
         GestureDetector(
@@ -159,30 +163,32 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class NavDrawer extends StatefulWidget {
-  var image, company, email,name;
-  NavDrawer(i, c, e,n) {
+  var image, company, email,name,profile;
+  NavDrawer(i, c, e,n,img) {
     this.email = e;
     this.image = i;
     this.company = c;
     this.name=n;
+    this.profile=img;
   }
 
   @override
   _NavDrawerState createState() =>
-      _NavDrawerState(this.email, this.image, this.company,this.name);
+      _NavDrawerState(this.email, this.image, this.company,this.name,this.profile);
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  var image, company, email,name;
-  _NavDrawerState(e, i, c,n) {
+  var image, company, email,name,profile;
+  _NavDrawerState(e, i, c,n,img) {
     this.email = e;
     this.image = i;
     this.company = c;
     this.name=n;
+    this.profile=img;
   }
   var firebase = FirebaseAuth.instance;
 
-  Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed(context) {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -196,7 +202,7 @@ class _NavDrawerState extends State<NavDrawer> {
             child: new Text('No'),
           ),
           new FlatButton(
-            onPressed: () => _logout(),
+            onPressed: () => _logout(context),
             child: new Text('Yes'),
           ),
         ],
@@ -205,11 +211,16 @@ class _NavDrawerState extends State<NavDrawer> {
         false;
   }
 
-  _logout() async {
-    await firebase.signOut().then((value){
+  _logout(context) async {
+    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
+
+    await firebase.signOut().then((value) async {
       var topic3=email.replaceAll('@',"");
       var topic4=topic3.replaceAll('.', "");
     FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
+      var prefs=await  SharedPreferences.getInstance();
+      prefs.setString("theme", "tealTheme");
+      themeNotifier.setTheme(tealTheme);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
               (Route<dynamic> route) => false);
@@ -228,15 +239,14 @@ class _NavDrawerState extends State<NavDrawer> {
               child: DrawerHeader(
                 child: Text(
                   '',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
                 decoration: BoxDecoration(
                   //color: Colors.green,
                     image: DecorationImage(
                         fit: BoxFit.contain,
-                        image: image == null
+                        image: profile==null?image == null
                             ? AssetImage('assets/others.png')
-                            : AssetImage(image))),
+                            : AssetImage(image):NetworkImage(profile))),
               ),
               onTap: () {
                 Navigator.push(
@@ -319,7 +329,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {_onBackPressed()},
+            onTap: () => {_onBackPressed(context)},
           ),
         ],
       ),

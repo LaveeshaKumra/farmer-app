@@ -3,7 +3,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:toast/toast.dart';
 
@@ -34,7 +36,8 @@ class _ProfilePageState extends State<MyProfilePage> {
   final TextEditingController _jobtitle = TextEditingController();
 
   DateTime _selectedDate=DateTime.now();
-
+  var  profile;
+  var  _image;
   bool _success, _progress = false;var _gender;
   _ProfilePageState(i) {
     email=i;
@@ -129,8 +132,7 @@ class _ProfilePageState extends State<MyProfilePage> {
         _selectedDate = value.docs[0]['dateofbirth'].toDate();
         _check();
         _gender = value.docs[0]['gender'];
-
-
+        profile=value.docs[0]['profile'];
       });
     });
   }
@@ -178,30 +180,177 @@ class _ProfilePageState extends State<MyProfilePage> {
         false;
   }
   _updateuser(context) async {
+   if(_image!=null){
+     var url;
+     FirebaseStorage storageReference = FirebaseStorage.instance;
+     Reference ref=storageReference.ref()
+         .child('profile/${_image.path.split('/').last}');
 
-    await databaseReference
-        .collection("users")
-        .where('email', isEqualTo: _emailController.text)
-        .get()
-        .then((value) async {
-      var i = value.docs[0].id;
-      print(i);
-      await databaseReference
-          .collection("users")
-          .doc(i)
-          .update({
-        'username': _username.text,
-        'mobileno': _mobileno.text,
-        'gender': _gender,
-        'dateofbirth': _selectedDate,
-        'address': _address.text
-      }).then((value) {
-        Toast.show("Profile Uploaded", context,
-            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-        setState(() {
-          _progress = false;
+     UploadTask  uploadTask = ref.putFile(_image);
+     uploadTask.then((res) async {
+       url=await res.ref.getDownloadURL();
+       print(url);
+       await databaseReference
+           .collection("users")
+           .where('email', isEqualTo: _emailController.text)
+           .get()
+           .then((value) async {
+         var i = value.docs[0].id;
+         print(i);
+         await databaseReference
+             .collection("users")
+             .doc(i)
+             .update({
+           'username': _username.text,
+           'mobileno': _mobileno.text,
+           'gender': _gender,
+           'dateofbirth': _selectedDate,
+           'address': _address.text,
+           'profile': url
+         }).then((value) {
+           Toast.show("Profile Uploaded", context,
+               duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+           setState(() {
+             _progress = false;
+           });
+         });
+       });
+     });
+   }
+   else{
+     await databaseReference
+         .collection("users")
+         .where('email', isEqualTo: _emailController.text)
+         .get()
+         .then((value) async {
+       var i = value.docs[0].id;
+       print(i);
+       await databaseReference
+           .collection("users")
+           .doc(i)
+           .update({
+         'username': _username.text,
+         'mobileno': _mobileno.text,
+         'gender': _gender,
+         'dateofbirth': _selectedDate,
+         'address': _address.text
+       }).then((value) {
+         Toast.show("Profile Uploaded", context,
+             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+         setState(() {
+           _progress = false;
+         });
+       });
+     });
+   }
+
+  }
+
+  ///image
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
         });
-      });
+  }
+
+  _removeProfile(context) async {
+    setState(() {
+      _image = null;
+      profile = null;
+    });
+  }
+
+  void _profile(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.edit),
+                      title: new Text('Change Profile'),
+                      onTap: () {
+                        _showPicker(context);
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.delete),
+                    title: new Text('Remove Profile'),
+                    onTap: () {
+                      _removeProfile(context);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+
+
+  _imgFromCamera() async {
+    var picker=ImagePicker();
+    var pickedFile = await picker.getImage(
+        source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        profile = "";
+        Toast.show("Uploading....", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+
+        // updateImage();
+      } else {
+        Toast.show("No image selected", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      }
+    });
+
+  }
+  _imgFromGallery() async {
+    var picker=ImagePicker();
+    var pickedFile = await picker.getImage(
+        source: ImageSource.gallery, imageQuality: 50);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        profile = "";
+        Toast.show("Uploading....", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+
+        //updateImage();
+      } else {
+        Toast.show("No image selected", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      }
     });
   }
 
@@ -251,7 +400,66 @@ class _ProfilePageState extends State<MyProfilePage> {
           padding: const EdgeInsets.all(20.0),
           child: ListView(
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Center(
+                    child: profile != null && profile != ""
+                        ? GestureDetector(
+                      onTap: () {
+                        _profile(context);
+                      },
+                      child: Container(
+                        // margin: const EdgeInsets.all(15.0),
+                        // padding: const EdgeInsets.all(3.0),
+                        // decoration: BoxDecoration(
+                        //     border: Border.all(color: Colors.blueAccent)
+                        // ),
+                        //borderRadius: BorderRadius.circular(50),
+                        child: Image.network(
+                          profile,
+                          width: 150,
+                          height: 150,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    )
+                        : _image != null
+                        ? Container(
+                      //borderRadius:
+                      //BorderRadius.circular(50),
+                      child: Image.file(
+                        _image,
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    )
+                        : GestureDetector(
+                      onTap: () {
+                        _showPicker(context);
+                      },
+                      child: Container(
+                        // margin: const EdgeInsets.all(15.0),
+                        // padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          //border: Border.all(color: Theme.of(context).primaryColor,width: 5),
+                          color: Colors.grey[200],
 
+                        ),
+
+                        width: 150,
+                        height: 150,
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30,),
               Material(
                 color: Colors.grey[200],
                 elevation: 2.0,
@@ -433,6 +641,8 @@ class _ProfilePageState extends State<MyProfilePage> {
                 child: RoundedButton(
                   text: "Update",
                   state: _progress,
+                  color: Theme.of(context).primaryColor,
+
                   press: () {
                     if (_formKey.currentState.validate()) {
                       setState(() {

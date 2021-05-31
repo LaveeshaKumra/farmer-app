@@ -4,6 +4,8 @@ import 'package:farmers_app/pending/account_not_approved.dart';
 import 'package:farmers_app/super_admin/super_admin_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:farmers_app/Theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'forgetpsw.dart';
@@ -29,14 +31,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  void _signIn() async {
+
+  void _signIn(context) async {
+    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
 
       FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text,
           password: _passwordController.text).then((value) async {
             final databaseReference = FirebaseFirestore.instance;
         await databaseReference.collection("users").where('email',isEqualTo: value.user.email).get().then((val) async {
+          var prefs=await  SharedPreferences.getInstance();
           if(val.docs.isNotEmpty){
             if(val.docs[0]['role']=="super_admin"){
+              prefs.setString("theme", "purpleTheme");
+              themeNotifier.setTheme(purpleTheme);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => SuperAdminHome()),
@@ -44,6 +51,8 @@ class _LoginPageState extends State<LoginPage> {
             }
             else if(val.docs[0]['role']=="admin"){
               if(val.docs[0]['status']=="Accepted"){
+                prefs.setString("theme", "blueTheme");
+                themeNotifier.setTheme(blueTheme);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => AdminPage()),
@@ -59,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
             }
             else{
               if(val.docs[0]['status']=="Accepted"){
+                prefs.setString("theme", "redTheme");
+                themeNotifier.setTheme(redTheme);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => MyHomePage()),
@@ -232,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               _progress = true;
                             });
-                            _signIn();
+                            _signIn(context);
                           }
                         },
                       ),

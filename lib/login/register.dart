@@ -95,9 +95,10 @@ print(_mobileno);
           'gender':_gender,
           'dateofbirth':_selectedDate,
           'address':_address.text,
-          'company':_companyid.text,
+          'company':_companyid.text.toUpperCase(),
           'role':jobtitlevalue,
           'status':'Pending',
+          'profile':null
           "leaveEnt":{}
 
         }).then((value) async{

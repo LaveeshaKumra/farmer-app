@@ -52,7 +52,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
         //    },),
         // ],
       ),
-      body: ListView.builder(
+      body: newList!=null?ListView.builder(
         itemCount: newList.length,
         itemBuilder: (context, index) {
           return Column(
@@ -74,6 +74,24 @@ class _TeamsScreenState extends State<TeamsScreen> {
             ],
           );
         },
+      ):Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              child: CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor)),
+              width: 30,
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Text("Loading.."),
+            )
+          ],
+        ),
       ),
       );
   }

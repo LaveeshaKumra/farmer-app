@@ -69,7 +69,7 @@ class _UserLeavesState extends State<UserLeaves> {
               children: snapshot.data.docs.map((DocumentSnapshot document) {
                 return new InkWell(
                   child: ListTile(
-                    leading: Icon(Icons.person),
+                    leading:document.data()['profile']==null || document.data()['profile']=="" ?Icon(Icons.person,size: 35,):Image.network(document.data()['profile'],width: 45,),
                     title: document.data()['username']==null?Text(''):Text(document.data()['username']),
                     subtitle: Text("From ${_convertdate(document.data()['start_date'].toDate())} to ${_convertdate(document.data()['end_date'].toDate())}"),
                     trailing: Text(document.data()['status']),

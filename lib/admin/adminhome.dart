@@ -8,6 +8,9 @@ import 'package:farmers_app/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Theme.dart';
 import 'addtask.dart';
 import 'allteam.dart';
 import 'homepageadmin.dart';
@@ -21,14 +24,19 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   var image, company, email;
+  var d1,d2;
+
+
   _AdminPageState() {
     _getUser();
-
+    var d = DateTime.now();
+    d1 = new DateTime(d.year, d.month, d.day, 0, 0, 0, 0, 0);
+    d2 = new DateTime(d.year, d.month, d.day, 23, 59, 59, 0, 0);
 
   }
   var firebase = FirebaseAuth.instance;
 
-  Future<bool> _onBackPressed() {
+  Future<bool> _onBackPressed(context) {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
@@ -42,7 +50,7 @@ class _AdminPageState extends State<AdminPage> {
             child: new Text('No'),
           ),
           new FlatButton(
-            onPressed: () => _logout(),
+            onPressed: () => _logout(context),
             child: new Text('Yes'),
           ),
         ],
@@ -51,15 +59,20 @@ class _AdminPageState extends State<AdminPage> {
         false;
   }
 
-  _logout() async {
-    await firebase.signOut().then((value)  {
-      var topic='admin$company';
-      var topic2=topic.replaceAll(' ', "");
-      var topic3=email.replaceAll('@',"");
-      var topic4=topic3.replaceAll('.', "");
-      print(topic2);
-      FirebaseMessaging.instance.unsubscribeFromTopic(topic2);
-      FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
+  _logout(context) async {
+    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
+    var topic='admin$company';
+    var topic2=topic.replaceAll(' ', "");
+    var topic3=FirebaseAuth.instance.currentUser.email.replaceAll('@',"");
+    var topic4=topic3.replaceAll('.', "");
+    print(topic2);
+    FirebaseMessaging.instance.unsubscribeFromTopic(topic2);
+    FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
+  await firebase.signOut().then((value)  async {
+
+      var prefs=await  SharedPreferences.getInstance();
+      prefs.setString("theme", "tealTheme");
+      themeNotifier.setTheme(tealTheme);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
               (Route<dynamic> route) => false);
@@ -155,172 +168,6 @@ class _AdminPageState extends State<AdminPage> {
 
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // drawer: NavDrawer(image, company, email),
-      appBar: AppBar(title: Text("Farmer's Page"),backgroundColor: Theme.of(context).primaryColor,actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(onTap:(){_onBackPressed ();},child: Icon(Icons.logout)),
-        )
-      ],),
-
-      //body: HomePageAdmin(email,company),
-      body:Home(company)
-    );
-  }
-}
-
-// class NavDrawer extends StatefulWidget {
-//   var image, company, email;
-//   NavDrawer(i, c, e) {
-//     this.email = e;
-//     this.image = i;
-//     this.company = c;
-//   }
-//
-//   @override
-//   _NavDrawerState createState() =>
-//       _NavDrawerState(this.email, this.image, this.company);
-// }
-
-// class _NavDrawerState extends State<NavDrawer> {
-//   var image, company, email;
-//   _NavDrawerState(e, i, c) {
-//     this.email = e;
-//     this.image = i;
-//     this.company = c;
-//   }
-//
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Drawer(
-//       child: ListView(
-//         // padding: EdgeInsets.zero,
-//         children: <Widget>[
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: InkWell(
-//               child: DrawerHeader(
-//                 child: Text(
-//                   '',
-//                   style: TextStyle(color: Colors.white, fontSize: 25),
-//                 ),
-//                 decoration: BoxDecoration(
-//                     //color: Colors.green,
-//                     image: DecorationImage(
-//                         fit: BoxFit.contain,
-//                         image: image == null
-//                             ? AssetImage('assets/others.png')
-//                             : AssetImage(image))),
-//               ),
-//               onTap: () {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => MyProfilePage(email)),
-//                 );
-//               },
-//             ),
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.home),
-//             title: Text('Home'),
-//             onTap: () => {Navigator.of(context).pop()},
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.people),
-//             title: Text('All Team members'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => AllUsersincompany(company)),
-//               )
-//             },
-//           ),
-//
-//           ListTile(
-//             leading: Icon(Icons.person_add_alt_1),
-//             title: Text('Worker ID Requests'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => WorkerRequestsScreen(company)),
-//               )
-//             },
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.access_time),
-//             title: Text('Leave Entitlement'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => LeaveEntitlement(company)),
-//               )
-//             },
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.work_off_outlined),
-//             title: Text('Leave Requests'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => TimeOff(company)),
-//               )
-//             },
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.card_giftcard_sharp),
-//             title: Text('Rewards'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => AllRewards(email,company)),
-//               )
-//             },
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.person),
-//             title: Text('Profile'),
-//             onTap: () => {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(builder: (context) => MyProfilePage(email)),
-//               )
-//             },
-//           ),
-//           ListTile(
-//             leading: Icon(Icons.exit_to_app),
-//             title: Text('Logout'),
-//             onTap: () => {_onBackPressed()},
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
-class Home extends StatefulWidget {
-  var company;
-  Home(c){this.company=c;}
-  @override
-  _HomeState createState() => _HomeState(this.company);
-}
-
-class _HomeState extends State<Home> {
-  var company;var d1,d2;
-  _HomeState(c){this.company=c;
-  var d = DateTime.now();
-  d1 = new DateTime(d.year, d.month, d.day, 0, 0, 0, 0, 0);
-  d2 = new DateTime(d.year, d.month, d.day, 23, 59, 59, 0, 0);}
   _convertdate(d){
     final DateFormat formatter = DateFormat('dd MMMM,yy');
     final String formatted = formatter.format(d);
@@ -330,7 +177,16 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      // drawer: NavDrawer(image, company, email),
+      appBar: AppBar(title: Text("Farmer's Page"),backgroundColor: Theme.of(context).primaryColor,actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(onTap:(){_onBackPressed (context);},child: Icon(Icons.logout)),
+        )
+      ],),
+
+      //body: HomePageAdmin(email,company),
+      body:ListView(
         shrinkWrap: true,
         children: [
 
@@ -387,7 +243,7 @@ class _HomeState extends State<Home> {
                           if(snapshot.data.docs.length==0){
                             return Center(
                               child: Container(
-                                child: Text("No Upcoming Task"),
+                                child: Text("No Task"),
                               ),
                             );
                           }
@@ -408,8 +264,8 @@ class _HomeState extends State<Home> {
                                             TaskDetailsInAdmin(
                                                 document.data(), document.id)),
                                   );
-                                   },
-                                );
+                                },
+                              );
                             }).toList(),
                           );
                         },
@@ -618,10 +474,10 @@ class _HomeState extends State<Home> {
                         ),
                         onTap: () => {
 
+
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => AllRewards(FirebaseAuth.instance.currentUser.email,company)),
+                            MaterialPageRoute(builder: (context) => MyProfilePage(email)),
                           )
                         },
                       ),
@@ -661,3 +517,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+

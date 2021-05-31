@@ -47,8 +47,49 @@ class _UserDetailState2 extends State<UserDetail2> {
                   return ListView(
                     children: <Widget>[
 
-                      SizedBox(height: 20,),
-                      ListTile(
+                      SizedBox(height: 30,),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+
+                          Center(
+                            child: d['profile'] != null && d['profile'] != ""
+                                ? Container(
+                              // margin: const EdgeInsets.all(15.0),
+                              // padding: const EdgeInsets.all(3.0),
+                              // decoration: BoxDecoration(
+                              //     border: Border.all(color: Colors.blueAccent)
+                              // ),
+                              //borderRadius: BorderRadius.circular(50),
+                              child: Image.network(
+                                d['profile'],
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.contain,
+                              ),
+                            )
+
+                                : Container(
+                              // margin: const EdgeInsets.all(15.0),
+                              // padding: const EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                //border: Border.all(color: Theme.of(context).primaryColor,width: 5),
+                                color: Colors.grey[200],
+
+                              ),
+
+                              width: 150,
+                              height: 150,
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30,),                      ListTile(
                         title: Text(
                           "User Name",
                           style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
