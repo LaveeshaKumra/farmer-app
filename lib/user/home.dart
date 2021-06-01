@@ -49,6 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
           image = "assets/female.png";
         });
       }
+      else {
+        setState(() {
+          image = "assets/others.png.png";
+        });
+      }
       var topic3=email.replaceAll('@',"");
       var topic4=topic3.replaceAll('.', "");
       FirebaseMessaging.instance.subscribeToTopic(topic4);
@@ -114,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(image, company, email,name,profile),
-      appBar: AppBar(title: Text("Hello $name"),
+      appBar: name==null?AppBar(title: Text("Hello")):AppBar(title: Text("Hello $name"),
       actions: [
         GestureDetector(
           child: Padding(
@@ -212,11 +217,12 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   _logout(context) async {
-    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
-
+    var emaill=FirebaseAuth.instance.currentUser.email;
+    
     await firebase.signOut().then((value) async {
-      var topic3=email.replaceAll('@',"");
-      var topic4=topic3.replaceAll('.', "");
+final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
+    var topic3=emaill.replaceAll('@',"");
+    var topic4=topic3.replaceAll('.', "");
     FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
       var prefs=await  SharedPreferences.getInstance();
       prefs.setString("theme", "tealTheme");
@@ -251,7 +257,7 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyProfilePage(email)),
+                  MaterialPageRoute(builder: (context) => MyProfilePage(FirebaseAuth.instance.currentUser.email)),
                 );
               },
             ),

@@ -60,16 +60,17 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   _logout(context) async {
-    final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
+    var emaill=FirebaseAuth.instance.currentUser.email;
+   
+  await firebase.signOut().then((value)  async {
+ final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
     var topic='admin$company';
     var topic2=topic.replaceAll(' ', "");
-    var topic3=FirebaseAuth.instance.currentUser.email.replaceAll('@',"");
+    var topic3=emaill.replaceAll('@',"");
     var topic4=topic3.replaceAll('.', "");
     print(topic2);
     FirebaseMessaging.instance.unsubscribeFromTopic(topic2);
     FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
-  await firebase.signOut().then((value)  async {
-
       var prefs=await  SharedPreferences.getInstance();
       prefs.setString("theme", "tealTheme");
       themeNotifier.setTheme(tealTheme);

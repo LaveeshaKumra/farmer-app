@@ -2,27 +2,27 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/login/login.dart';
+import 'package:farmers_app/super_admin/super_admin_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:toast/toast.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 
-class MyProfilePage extends StatefulWidget {
+class ProfilePageSuperAdmin extends StatefulWidget {
   var email;
-  MyProfilePage(i){
+  ProfilePageSuperAdmin(i){
     this.email=i;
-    print(email);
+    print("hey inside ProfilePageSuperAdmin");
   }
   @override
   _ProfilePageState createState() => _ProfilePageState(this.email);
 }
 
-class _ProfilePageState extends State<MyProfilePage> {
+class _ProfilePageState extends State<ProfilePageSuperAdmin> {
   var email;
   TextEditingController _textEditingController = TextEditingController();
 
@@ -38,6 +38,7 @@ class _ProfilePageState extends State<MyProfilePage> {
   DateTime _selectedDate=DateTime.now();
   var  profile;
   var  _image;
+
   bool _success, _progress = false;var _gender;
   _ProfilePageState(i) {
     email=i;
@@ -116,7 +117,7 @@ class _ProfilePageState extends State<MyProfilePage> {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference
         .collection("users")
-        .where('email', isEqualTo: FirebaseAuth.instance.currentUser.email)
+        .where('email', isEqualTo: email)
         .get()
         .then((value) {
       print(value);
@@ -133,116 +134,84 @@ class _ProfilePageState extends State<MyProfilePage> {
         _check();
         _gender = value.docs[0]['gender'];
         profile=value.docs[0]['profile'];
+
+
       });
     });
   }
-  var _firebaseAuth=FirebaseAuth.instance;
-  _sendemail() {
-    return _firebaseAuth.sendPasswordResetEmail(email: _emailController.text).then((value){
 
-      _showdialog();
-
-    });
-
-  }
-
-  _showdialog(){
-    return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.SUCCES,
-      animType: AnimType.TOPSLIDE,
-      title: 'Reset your password',
-      desc: 'Email Sent Successfully to ${_emailController.text}',
-      //showCloseIcon: true,
-      // btnCancelOnPress: () {},
-      btnOkOnPress: () {Navigator.pop(context);},
-    )..show();
-  }
-
-  Future<bool> resetpswddialog() {
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are You Sure?'),
-        content:new Text('Do You Want To Reset Your Password?') ,
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () {_sendemail();} ,
-            child: new Text('Yes'),
-          ),
-          new FlatButton(
-            onPressed: () =>  Navigator.pop(context),
-            child: new Text('No'),
-          ),
-        ],
-      ),
-    ) ??
-        false;
-  }
   _updateuser(context) async {
-   if(_image!=null){
-     var url;
-     FirebaseStorage storageReference = FirebaseStorage.instance;
-     Reference ref=storageReference.ref()
-         .child('profile/${_image.path.split('/').last}');
+    if(_image!=null){
+      var url;
+      FirebaseStorage storageReference = FirebaseStorage.instance;
+      Reference ref=storageReference.ref()
+          .child('profile/${_image.path.split('/').last}');
 
-     UploadTask  uploadTask = ref.putFile(_image);
-     uploadTask.then((res) async {
-       url=await res.ref.getDownloadURL();
-       print(url);
-       await databaseReference
-           .collection("users")
-           .where('email', isEqualTo: _emailController.text)
-           .get()
-           .then((value) async {
-         var i = value.docs[0].id;
-         print(i);
-         await databaseReference
-             .collection("users")
-             .doc(i)
-             .update({
-           'username': _username.text,
-           'mobileno': _mobileno.text,
-           'gender': _gender,
-           'dateofbirth': _selectedDate,
-           'address': _address.text,
-           'profile': url
-         }).then((value) {
-           Toast.show("Profile Uploaded", context,
-               duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-           setState(() {
-             _progress = false;
-           });
-         });
-       });
-     });
-   }
-   else{
-     await databaseReference
-         .collection("users")
-         .where('email', isEqualTo: _emailController.text)
-         .get()
-         .then((value) async {
-       var i = value.docs[0].id;
-       print(i);
-       await databaseReference
-           .collection("users")
-           .doc(i)
-           .update({
-         'username': _username.text,
-         'mobileno': _mobileno.text,
-         'gender': _gender,
-         'dateofbirth': _selectedDate,
-         'address': _address.text
-       }).then((value) {
-         Toast.show("Profile Uploaded", context,
-             duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-         setState(() {
-           _progress = false;
-         });
-       });
-     });
-   }
+      UploadTask  uploadTask = ref.putFile(_image);
+      uploadTask.then((res) async {
+        url=await res.ref.getDownloadURL();
+        print(url);
+        await databaseReference
+            .collection("users")
+            .where('email', isEqualTo: _emailController.text)
+            .get()
+            .then((value) async {
+          var i = value.docs[0].id;
+          print(i);
+          await databaseReference
+              .collection("users")
+              .doc(i)
+              .update({
+            'username': _username.text,
+            'mobileno': _mobileno.text,
+            'gender': _gender,
+            'dateofbirth': _selectedDate,
+            'address': _address.text,
+            'profile': url
+          }).then((value) {
+            Toast.show("Profile Uploaded", context,
+                duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+            setState(() {
+              _progress = false;
+            });
+          });
+        });
+      });
+    }
+    else{
+      await databaseReference
+          .collection("users")
+          .where('email', isEqualTo: _emailController.text)
+          .get()
+          .then((value) async {
+        var i = value.docs[0].id;
+        print(i);
+        await databaseReference
+            .collection("users")
+            .doc(i)
+            .update({
+          'username': _username.text,
+          'mobileno': _mobileno.text,
+          'gender': _gender,
+          'dateofbirth': _selectedDate,
+          'address': _address.text,
+          'company':_companyid.text.toUpperCase()
+        }).then((value) {
+          Toast.show("Profile Uploaded", context,
+              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+          setState(() {
+            _progress = false;
+          });
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+              SuperAdminHome()), (Route<dynamic> route) => false);
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => SuperAdminHome()),
+          // );
+        });
+      });
+    }
 
   }
 
@@ -356,23 +325,12 @@ class _ProfilePageState extends State<MyProfilePage> {
 
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Profile"),
-        actions: [
-          InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.vpn_key),
-            ),
-            onTap: (){
-              resetpswddialog();
-            },
-          )
-        ],
+        title: Text("View Profile"),
+
       ),
       body: _emailController.text == null
           ? Center(
@@ -490,7 +448,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
                   // controller: _emailController,
-enabled: false,
+                  enabled: false,
                   keyboardType: TextInputType.emailAddress,
                   cursorColor: Theme.of(context).primaryColor,
                   decoration: InputDecoration(
@@ -602,13 +560,16 @@ enabled: false,
                 elevation: 2.0,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
-                  enabled: false,
-                  //controller: _companyid,
-
+                  controller: _companyid,
+                  validator: (var value) {
+                    if (value.isEmpty) {
+                      return 'Please enter Company name';
+                    }
+                    return null;
+                  },
                   cursorColor: Theme.of(context).primaryColor,
-
                   decoration: InputDecoration(
-                      hintText: _companyid.text,
+                      hintText: "Please enter Company name",
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
                           horizontal: 25, vertical: 13)),
@@ -617,6 +578,26 @@ enabled: false,
               SizedBox(
                 height: 20,
               ),
+              // Material(
+              //   //color: Colors.grey[200],
+              //   elevation: 2.0,
+              //   borderRadius: BorderRadius.all(Radius.circular(5)),
+              //   child: TextFormField(
+              //     //enabled: false,
+              //     controller: _companyid,
+              //
+              //     cursorColor: Theme.of(context).primaryColor,
+              //
+              //     decoration: InputDecoration(
+              //         //hintText: _companyid.text,
+              //         border: InputBorder.none,
+              //         contentPadding: EdgeInsets.symmetric(
+              //             horizontal: 25, vertical: 13)),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
               Material(
                 color: Colors.grey[200],
                 elevation: 2.0,
@@ -629,7 +610,7 @@ enabled: false,
 
                     cursorColor: Theme.of(context).primaryColor,
                     decoration: InputDecoration(
-                        hintText: _jobtitle.text,
+                        hintText: _jobtitle.text=="admin"?"Farmer":"Worker",
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 25, vertical: 13)),
@@ -642,7 +623,6 @@ enabled: false,
                   text: "Update",
                   state: _progress,
                   color: Theme.of(context).primaryColor,
-
                   press: () {
                     if (_formKey.currentState.validate()) {
                       setState(() {

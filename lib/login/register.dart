@@ -87,6 +87,16 @@ print(_mobileno);
         else{
           jobtitlevalue = 'farmer';
         }
+        if(_gender==null){
+          setState(() {
+            _gender="Male";
+          });
+        }
+        if(jobtitlevalue==null){
+          setState(() {
+            jobtitlevalue="farmer";
+          });
+        }
         await databaseReference.collection("users")
             .add({
           'email': _emailController.text,
@@ -98,7 +108,7 @@ print(_mobileno);
           'company':_companyid.text.toUpperCase(),
           'role':jobtitlevalue,
           'status':'Pending',
-          'profile':null
+          'profile':null,
           "leaveEnt":{}
 
         }).then((value) async{

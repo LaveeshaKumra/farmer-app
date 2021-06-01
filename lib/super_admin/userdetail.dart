@@ -7,7 +7,7 @@ import 'package:farmers_app/admin/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boom_menu/flutter_boom_menu.dart';
 import 'package:intl/intl.dart';
-
+import 'profileinsuperadmin.dart';
 class UserDetail extends StatefulWidget {
   var data;
   UserDetail(d) {
@@ -50,7 +50,7 @@ class _UserDetailState extends State<UserDetail> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProfilePage(data['email'])),
+                    builder: (context) => ProfilePageSuperAdmin(data['email'])),
               );
             },),
           ):Container()
@@ -75,7 +75,7 @@ class _UserDetailState extends State<UserDetail> {
             onTap: () =>  Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(data['email'])),
+                  builder: (context) => ProfilePageSuperAdmin(data['email'])),
             ),
           ),
           MenuItem(

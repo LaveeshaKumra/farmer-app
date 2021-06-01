@@ -1,3 +1,4 @@
+import 'package:farmers_app/super_admin/workerRequest.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:farmers_app/super_admin/requests.dart';
 import 'package:farmers_app/super_admin/tasks.dart';
@@ -156,6 +157,15 @@ class SuperAdminHomeState extends State<SuperAdminHome> {
                context,
                MaterialPageRoute(builder: (context) => RequestsScreen()),
              )
+           ),
+           MenuItem(
+               child: Icon(Icons.person_add_alt_1, color: Colors.black),
+               title: "Worker ID Request",
+               subtitle: "",
+               onTap: () =>   Navigator.push(
+                 context,
+                 MaterialPageRoute(builder: (context) => WorkerRequestsScreen()),
+               )
            ),
            MenuItem(
                child: Icon(Icons.logout, color: Colors.black),
