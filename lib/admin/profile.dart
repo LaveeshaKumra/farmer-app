@@ -122,7 +122,11 @@ var genders=["Male","Female","Others"];
           print(value);
           print(value.docs);
       setState(() {
-        _jobtitle.text = value.docs[0]['role'];
+        //_jobtitle.text = value.docs[0]['role'];
+        if(value.docs[0]['role']=='admin')
+        _jobtitle.text = "Farmer";
+        else
+ _jobtitle.text = "Worker";
         _emailController.text = value.docs[0]['email'];
         _mobileno.text = value.docs[0]['mobileno'];
         print(_mobileno.text);

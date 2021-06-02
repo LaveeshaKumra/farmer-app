@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/user/requestdetail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
@@ -53,7 +54,7 @@ class _RewardsState extends State<Rewards> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("rewards")
-              .where("to", isEqualTo: email)
+              .where("to", isEqualTo: FirebaseAuth.instance.currentUser.email)
               .orderBy('date', descending: true)
               .snapshots(),
           builder:
@@ -119,12 +120,12 @@ class _RewardsState extends State<Rewards> {
                         subtitle: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection("users")
-                                .where("email", isEqualTo: email)
+                                .where("email", isEqualTo: document.data()['from'])
                                 .snapshots(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snap) {
                               if (snapshot.hasError || snap.data == null) {
-                                return Text(document.data()['to']);
+                                return Text(document.data()['from']);
                               } else {
                                 user = snap.data.docs[0].data()['username'];
                                 return Text(

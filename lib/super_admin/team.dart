@@ -24,7 +24,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
     var val;
     var arr=[];
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("users").where('role',isNotEqualTo: 'super_admin').get().then(
+    await databaseReference.collection("users").where('role',isNotEqualTo: 'super_admin').where('status', whereIn: ['Pending', 'Accepted']).get().then(
             (QuerySnapshot querySnapshot) => {
             querySnapshot.docs.forEach((doc) {
             print(doc["company"]);
@@ -62,7 +62,6 @@ class _TeamsScreenState extends State<TeamsScreen> {
                   leading: Icon(Icons.people),
                   title: Text(newList[index]),
                   trailing: Icon(Icons.navigate_next),
-                  //trailing: Text(d[index].data['role']),
                 ),
                 onTap: (){
                   Navigator.push(

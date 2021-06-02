@@ -245,10 +245,7 @@ class _UserDetailState extends State<MemberDetail> {
               "Role",
               style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 12.0),
             ),
-            subtitle: Text(
-              data['role'],
-              style: TextStyle(fontSize: 18.0),
-            ),
+            subtitle:data['role']=="admin"?Text("Farmer",style: TextStyle(fontSize: 18.0),):Text("Worker",style: TextStyle(fontSize: 18.0),) 
           ),
 
           Divider(),

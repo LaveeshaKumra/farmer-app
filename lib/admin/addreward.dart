@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
@@ -172,7 +173,7 @@ class _AddTaskState extends State<AddReward> {
     await databaseReference.collection("rewards")
         .add({
       'name': _title.text,
-      'from':email,
+      'from':FirebaseAuth.instance.currentUser.email,
       'to':_assignedto,
       "type":type,
       "date":DateTime.now()
@@ -324,7 +325,7 @@ var topic3=_assignedto.replaceAll('@',"");
                     // },
                     items: items,
                     value: _assignedto,
-                    hint: "Assign Task To",
+                    hint: "Reward To",
                     searchHint: "Select One Worker",
                     onChanged: (value) {
                       setState(() {

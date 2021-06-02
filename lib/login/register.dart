@@ -87,16 +87,7 @@ print(_mobileno);
         else{
           jobtitlevalue = 'farmer';
         }
-        if(_gender==null){
-          setState(() {
-            _gender="Male";
-          });
-        }
-        if(jobtitlevalue==null){
-          setState(() {
-            jobtitlevalue="farmer";
-          });
-        }
+
         await databaseReference.collection("users")
             .add({
           'email': _emailController.text,
@@ -412,8 +403,15 @@ formOneBuilder(BuildContext context) {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal:20.0),
-                          child: DropdownButton(
-
+                          child: DropdownButtonFormField(
+                            validator: (var value) {
+                              print(value);
+                              if (value==null) {
+                                return 'Please Select Gender';
+                              }
+                              return null;
+                            },
+                            //validator: (value) => value == null ? 'field required' : null,
                             isExpanded: true,
                             hint: Text('Gender'),
                             value: _gender,
@@ -437,13 +435,18 @@ formOneBuilder(BuildContext context) {
                         color: Colors.grey[200],
                         elevation: 2.0,
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                        child: TextField(
+                        child: TextFormField(
                           focusNode: AlwaysDisabledFocusNode(),
                           controller: _textEditingController,
                           onTap: () {
                             _selectDate(context);
                           },
-
+                          validator: (var value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a valid Date';
+                            }
+                            return null;
+                          },
                           cursorColor: Theme.of(context).primaryColor,
                           decoration: InputDecoration(
                               hintText: "Date of Birth",
