@@ -192,7 +192,7 @@ var allnames,allemails;
   _getallworkers() async {
     var val;
     final databaseReference = FirebaseFirestore.instance;
-    await databaseReference.collection("tasks").get().then((val){
+    await databaseReference.collection("tasks").where('company',isEqualTo: company).get().then((val){
       setState(() {
         _id.text=(val.docs.length+1).toString();
       });

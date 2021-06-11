@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'addreward.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -38,7 +39,7 @@ _Delete(id) async {
           builder: (context) => new AlertDialog(
             title: new Text(title),
             content: new Text(
-                "Reward Type : $type\n\nSent by : $from\n\nDate : ${_convertdate(date.toDate())}"),
+                "Reward Type : $type\n\nSent To : $from\n\nDate : ${_convertdate(date.toDate())}"),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () {
@@ -145,7 +146,7 @@ _Delete(id) async {
                           subtitle: StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection("users")
-                                  .where("email", isEqualTo: email)
+                                  .where("email", isEqualTo: document.data()['to'])
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<QuerySnapshot> snap) {

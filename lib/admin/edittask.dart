@@ -579,6 +579,7 @@ var _stime,_etime;
                   child: RoundedButton(
                     text: "Update Task",
                     state: _progress,
+                    color:Theme.of(context).primaryColor,
                     press: () {
                       if (_formKey.currentState.validate()) {
                         setState(() {

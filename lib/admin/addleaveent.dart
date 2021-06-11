@@ -121,6 +121,7 @@ class _AddLeaveEntitlementState extends State<AddLeaveEntitlement> {
                   child: RoundedButton(
                     text: "Add Leave Entitlement",
                     state: _progress,
+                    color:Theme.of(context).primaryColor,
                     press: () {
 
                       // if(_assignedto==null){

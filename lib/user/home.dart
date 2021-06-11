@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       else {
         setState(() {
-          image = "assets/others.png.png";
+          image = "assets/others.png";
         });
       }
       var topic3=email.replaceAll('@',"");
@@ -190,6 +190,8 @@ class _NavDrawerState extends State<NavDrawer> {
     this.company = c;
     this.name=n;
     this.profile=img;
+    print(image);
+    print(profile);
   }
   var firebase = FirebaseAuth.instance;
 
@@ -250,7 +252,7 @@ final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
                   //color: Colors.green,
                     image: DecorationImage(
                         fit: BoxFit.contain,
-                        image: profile==null?image == null
+                        image: profile==null || profile == "" ? image==null
                             ? AssetImage('assets/others.png')
                             : AssetImage(image):NetworkImage(profile))),
               ),

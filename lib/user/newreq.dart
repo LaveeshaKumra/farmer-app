@@ -409,6 +409,7 @@ var noleaves=false;
                                           _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():RoundedButton(
                                             text: "Apply Now",
                                             state: _progress,
+                                            color:Theme.of(context).primaryColor,
                                             press: () {
                                               if (_formKey.currentState.validate()) {
                                                 setState(() {
@@ -533,6 +534,7 @@ var noleaves=false;
                                           _type==null|| numberofleaves==0 || int.parse(map[_type])==0?Container():RoundedButton(
                                             text: "Apply Now",
                                             state: _progress,
+                                            color:Theme.of(context).primaryColor,
                                             press: () {
                                               if (_formKey.currentState.validate()) {
                                                 setState(() {

@@ -45,13 +45,13 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
       appBar: AppBar(
         title: Text("Leave Details"),
         actions: [
-          data['status']=="Pending"?GestureDetector(
+          GestureDetector(
             onTap: (){_deletereq();},
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.delete),
             ),
-          ):Container()
+          )
         ],
       ),
       body: data == null || data == ""
