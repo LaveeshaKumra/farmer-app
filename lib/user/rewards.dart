@@ -25,13 +25,13 @@ class _RewardsState extends State<Rewards> {
     return formatted;
   }
 
-  Future<bool> rewardialog(title, from, date, type) {
+  Future<bool> rewardialog(title, from, date, type,reward) {
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
             title: new Text(title),
             content: new Text(
-                "Reward Type : $type\n\nSent by : $from\n\nDate : ${_convertdate(date.toDate())}"),
+                "Reward Type : $type\n\nReward : $reward\n\nSent by : $from\n\nDate : ${_convertdate(date.toDate())}"),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () {
@@ -117,7 +117,7 @@ class _RewardsState extends State<Rewards> {
                             ? Icon(Icons.monetization_on_outlined)
                             : Icon(Icons.wallet_giftcard_sharp),
                         //trailing: Text("${_convertdate(document.data()['date'].toDate())}"),
-                        subtitle: StreamBuilder<QuerySnapshot>(
+                        trailing: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection("users")
                                 .where("email", isEqualTo: document.data()['from'])
@@ -133,11 +133,12 @@ class _RewardsState extends State<Rewards> {
                               }
                             }),
                         title: Text("${document.data()['name']}"),
+                        subtitle: Text("${document.data()['reward']}"),
                         //trailing: Text(document.data()['company']),
                       ),
                       onTap: () {
                         rewardialog(document.data()['name'], user,
-                            document.data()['date'], document.data()['type']);
+                            document.data()['date'], document.data()['type'],document.data()['reward']);
                       },
                     ),
                   );

@@ -27,6 +27,8 @@ class _AddTaskState extends State<AddReward> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
+  final TextEditingController _reward = TextEditingController();
+
   List<String> giftdropdown=[
     "Money","Gift"
   ];
@@ -176,6 +178,7 @@ class _AddTaskState extends State<AddReward> {
       'from':FirebaseAuth.instance.currentUser.email,
       'to':_assignedto,
       "type":type,
+      'reward':_reward.text,
       "date":DateTime.now()
     }).then((value) async {
       //await sendAndRetrieveMessage('${list1[i]}-Vrinda');
@@ -362,6 +365,33 @@ var topic3=_assignedto.replaceAll('@',"");
                   ),
                 ),
               ),
+
+              type!=null?SizedBox(
+                height: 20,
+              ):Container(),
+              type!=null?Material(
+                color: Colors.grey[200],
+                elevation: 2.0,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                child: TextFormField(
+                  controller: _reward,
+                  validator: (var value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a valid reward';
+                    }
+                    return null;
+                  },
+                  minLines: 1,
+                  maxLines: 5,
+                  cursorColor: Theme.of(context).primaryColor,
+                  decoration: InputDecoration(
+                      hintText: type=="Gift"?"Name of Gift":"Money Amount",
+
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 13)),
+                ),
+              ):Container(),
 
               SizedBox(
                 height: 20,

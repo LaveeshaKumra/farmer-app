@@ -38,6 +38,7 @@ class _ProfilePageState extends State<MyProfilePage> {
   DateTime _selectedDate=DateTime.now();
   var  profile;
   var  _image;
+  var edit=false;
   bool _success, _progress = false;var _gender;
   _ProfilePageState(i) {
     email=i;
@@ -183,6 +184,9 @@ class _ProfilePageState extends State<MyProfilePage> {
         false;
   }
   _updateuser(context) async {
+    setState(() {
+      edit=false;
+    });
    if(_image!=null){
      var url;
      FirebaseStorage storageReference = FirebaseStorage.instance;
@@ -366,6 +370,18 @@ class _ProfilePageState extends State<MyProfilePage> {
       appBar: AppBar(
         title: Text("My Profile"),
         actions: [
+      InkWell(
+      child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Icon(Icons.edit),
+    ),
+    onTap: (){
+    setState(() {
+      edit=true;
+    });
+    Toast.show("Edit Profile", context);
+    },
+      ),
           InkWell(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -410,7 +426,10 @@ class _ProfilePageState extends State<MyProfilePage> {
                     child: profile != null && profile != ""
                         ? GestureDetector(
                       onTap: () {
-                        _profile(context);
+                        if(edit==false){}
+                        else{
+                          _profile(context);
+                        }
                       },
                       child: Container(
                         // margin: const EdgeInsets.all(15.0),
@@ -440,7 +459,10 @@ class _ProfilePageState extends State<MyProfilePage> {
                     )
                         : GestureDetector(
                       onTap: () {
-                        _showPicker(context);
+                        if(edit==false){}
+                        else{
+                          _showPicker(context);
+                        }
                       },
                       child: Container(
                         // margin: const EdgeInsets.all(15.0),
@@ -469,6 +491,7 @@ class _ProfilePageState extends State<MyProfilePage> {
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
                   controller: _username,
+                  enabled: edit,
                   validator: (var value) {
                     if (value.isEmpty) {
                       return 'Please enter your name';
@@ -513,6 +536,7 @@ enabled: false,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
                   controller: _mobileno,
+                  enabled: edit,
 
                   keyboardType: TextInputType.number,
                   cursorColor: Theme.of(context).primaryColor,
@@ -542,7 +566,7 @@ enabled: false,
                         .map((e) =>
                         DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
-                    onChanged: (value) {
+                    onChanged:edit==false?null: (value) {
                       setState(() {
                         _gender = value;
                       });
@@ -561,7 +585,10 @@ enabled: false,
                 child: TextField(
                   //focusNode: AlwaysDisabledFocusNode(),
                   controller: _textEditingController,
+                  enabled: edit,
                   onTap: () {
+                    if(edit==false){}
+                    else
                     _selectDate(context);
                   },
 
@@ -582,6 +609,7 @@ enabled: false,
                 elevation: 2.0,
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 child: TextFormField(
+                  enabled: edit,
                   controller: _address,
                   validator: (var value) {
                     if (value.isEmpty) {

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class AccountNotApproved extends StatefulWidget {
 
@@ -75,7 +76,35 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
       );
     });
   }
+  var id;
+  _deleteuser() async {
 
+      var topic3 = FirebaseAuth.instance.currentUser.email.replaceAll('@', "");
+      var topic4 = topic3.replaceAll('.', "");
+      FirebaseMessaging.instance.unsubscribeFromTopic(topic4);
+
+      FirebaseFirestore.instance.collection("users").where("email",isEqualTo: FirebaseAuth.instance.currentUser.email).get().then((value) {
+        print(value);
+        setState(() {
+          id=value.docs[0].id;
+        });
+
+      }).then((val) async {
+        await FirebaseFirestore.instance.collection("users").doc(id).delete().then((value) {
+          FirebaseAuth.instance.currentUser.delete().then((value){
+            Toast.show("Successfully Deleted Your Account ", context,
+                duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          });
+        });
+
+      });
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,7 +176,18 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
             SizedBox(
               height: 10,
             ),
-
+            status=="Pending"?Container():Container(
+              alignment: Alignment.center,
+              child: InkWell(
+                child: Text(
+                  "Want to register again , with this email ?",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontStyle: FontStyle.italic,decoration: TextDecoration.underline,color: Theme.of(context).primaryColor),
+                ),
+                onTap: (){
+                  _deleteuser();
+                },
+              ),
+            ),
           ],
 
         ),

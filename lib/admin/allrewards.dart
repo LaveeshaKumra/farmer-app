@@ -33,13 +33,13 @@ _Delete(id) async {
     Navigator.pop(context,true);
   });
 }
-  Future<bool> rewardialog(title, from, date, type,id) {
+  Future<bool> rewardialog(title, from, date, type,id,reward) {
     return showDialog(
           context: context,
           builder: (context) => new AlertDialog(
             title: new Text(title),
             content: new Text(
-                "Reward Type : $type\n\nSent To : $from\n\nDate : ${_convertdate(date.toDate())}"),
+                "Reward Type : $type\n\nReward : $reward\n\nSent To : $from\n\nDate : ${_convertdate(date.toDate())}"),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () {
@@ -163,7 +163,7 @@ _Delete(id) async {
                         ),
                         onTap: () {
                           rewardialog(document.data()['name'], user,
-                              document.data()['date'], document.data()['type'],document.id);
+                              document.data()['date'], document.data()['type'],document.id,document.data()['reward']);
                         },
                       ),
                     );

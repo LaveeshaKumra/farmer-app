@@ -69,7 +69,7 @@ class _ReportPageState extends State<UserReportChart> {
     return Column(
       children: [
         StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('attendance').where("email",isEqualTo: email).snapshots(),
+          stream: FirebaseFirestore.instance.collection('attendance').where("email",isEqualTo: email).where("out_time",isNotEqualTo: "").snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return LinearProgressIndicator();
