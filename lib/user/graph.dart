@@ -69,15 +69,15 @@ class _ReportPageState extends State<ReportPage> {
             } else {
 
               var x;
-              List<Data> data = snapshot.data.docs
+              snapshot.data.docs
                   .map((documentSnapshot) {
                     if(documentSnapshot.data()['in_time'].toDate().year==DateTime.now().year){
+
                       monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]=monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]+(documentSnapshot.data()['out_time'].toDate()).difference(documentSnapshot.data()['in_time'].toDate()).inMinutes;
                     }
 
               })
                   .toList();
-              var xx;
                List<Data> data2=[];
                if(monthdata==null){
                }

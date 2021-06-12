@@ -116,7 +116,7 @@ class _AttendanceState extends State<Attendance> {
         'email':email,
         'in_time': d,
         'out_time':"",
-        'date':DateTime(d.year,d.month,d.day,0,0,0,0,0)
+        'date':DateTime(d.year,d.month,d.day)
       }).then((value) {
         _sendnotificationin();
         Toast.show("In Time is ${converttime(d).format(context)}", context,
@@ -144,7 +144,7 @@ class _AttendanceState extends State<Attendance> {
   @override
   Widget build(BuildContext context) {
 
-    Query  collectionStream = FirebaseFirestore.instance.collection('attendance').where("email",isEqualTo: email).where('in_time', isGreaterThanOrEqualTo: d1).where('in_time',isLessThanOrEqualTo: d2).orderBy('in_time',descending: true);
+    Query  collectionStream = FirebaseFirestore.instance.collection('attendance').where("email",isEqualTo: email).where('in_time', isGreaterThanOrEqualTo: DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,0,0,0,0)).where('in_time',isLessThanOrEqualTo:  DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,59,59,59,59)).orderBy('in_time',descending: true);
     return Scaffold(
       appBar: AppBar(
         title: Text("Attendance"),

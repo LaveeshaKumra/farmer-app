@@ -39,7 +39,7 @@ class _ReportPageState extends State<UserReportChart> {
   List<charts.Series> seriesList;
 
   _generateData(mydata) {
-    print(mydata);
+    print("mydata->$mydata");
     _seriesBarData = List<charts.Series<Data, String>>();
     _seriesBarData.add(
       charts.Series(
@@ -89,13 +89,15 @@ class _ReportPageState extends State<UserReportChart> {
               // print(sales);
               // print(monthdata);
               var x;
-              List<Data> data = snapshot.data.docs
+               snapshot.data.docs
                   .map((documentSnapshot) {
                 if(documentSnapshot.data()['in_time'].toDate().year==DateTime.now().year){
-                  print("in 1");
-                  print(monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]);
+
                   monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]=monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]+(documentSnapshot.data()['out_time'].toDate()).difference(documentSnapshot.data()['in_time'].toDate()).inMinutes;
                   //x={ 'month':_convertmonth(documentSnapshot.data()['in_time'].toDate()),'hours':monthdata[_convertmonth(documentSnapshot.data()['in_time'].toDate())]};
+                }
+                else{
+                  print("in else");
                 }
 
               })
@@ -194,15 +196,17 @@ class Sales {
 
 class Data{
   final String month;
+  final String type;
   final int hours;
-  Data(this.month,this.hours);
+  Data(this.month,this.hours,this.type);
 
   Data.fromMap(Map<String, dynamic> map)
       : assert(map['month'] != null),
         assert(map['hours'] != null),
         month = map['month'],
-        hours = map['hours'];
+        hours = map['hours'],
+        type = map['type'];
 
   @override
-  String toString() => "Recordinsidedata<$month -> month:$hours -> hours>";
+  String toString() => "Recordinsidedata<$month -> month:$hours -> hours$type -> type>";
 }

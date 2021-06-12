@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/adminhome.dart';
 import 'package:farmers_app/login/login.dart';
+import 'package:farmers_app/login/register.dart';
 import 'package:farmers_app/super_admin/super_admin_home.dart';
 import 'package:farmers_app/user/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,7 +97,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
                 duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
+              MaterialPageRoute(builder: (context) => Register()),
             );
           });
         });
@@ -180,7 +181,7 @@ class _AccountNotApprovedState extends State<AccountNotApproved> {
               alignment: Alignment.center,
               child: InkWell(
                 child: Text(
-                  "Want to register again , with this email ?",
+                  "SignUp Page",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontStyle: FontStyle.italic,decoration: TextDecoration.underline,color: Theme.of(context).primaryColor),
                 ),
                 onTap: (){
