@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Theme.dart';
+import 'calendar2.dart';
 import 'graph.dart';
 import 'rewards.dart';
 import 'alltasks.dart';
@@ -282,14 +283,24 @@ final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
              },
           ),
           ListTile(
-            leading: Icon(Icons.calendar_today_rounded),
-            title: Text('Attendance'),
+            leading: Icon(Icons.more_time),
+            title: Text('Apply Attendance'),
             onTap: () => {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Attendance(email,company,name)),
               )
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.calendar_today_rounded),
+            title: Text('View Calendar'),
+            onTap: () => {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Calendar2()),
+            )
             },
           ),
           ListTile(

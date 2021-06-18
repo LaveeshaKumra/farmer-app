@@ -321,10 +321,18 @@ class _Calendar2State extends State<Calendar2> {
     TimeOfDay time=TimeOfDay(hour: t.hour,minute: t.minute);
     return time;
   }
+  _deletereq(docid) async {
+    final databaseReference = FirebaseFirestore.instance;
+    await databaseReference.collection("timeoff").doc(docid).delete().then((value) {
+      Navigator.pop(context,true);
+      Navigator.pop(context,true);
+    });
+
+  }
    buildDialog(int dayNumber) {
     int eventCount = 0;
     DateTime eventDate,eventDate2;
-    var eventtitle,eventdesc,eventstatus;
+    var eventtitle,eventdesc,eventstatus,docid,starttime;
 
     _userEventSnapshot.docs.forEach((doc) {
       eventDate = doc.data()['start_date'].toDate();
@@ -337,6 +345,8 @@ class _Calendar2State extends State<Calendar2> {
         eventtitle=doc.data()['title'];
         eventdesc=doc.data()['description'];
         eventstatus=doc.data()['status'];
+        starttime=doc.data()['start_date'].toDate();
+        docid=doc.id;
       }
     });
 
@@ -348,8 +358,14 @@ class _Calendar2State extends State<Calendar2> {
             title: Text("$eventtitle"),
             content: Text("$eventdesc\nStatus : $eventstatus"),
             actions: [
+              starttime.isAfter(DateTime.now())?FlatButton(
+                child: Text("Delete Request",style: TextStyle(color: Colors.red),),
+                onPressed: () {
+                  _deletereq(docid);
+                },
+              ):Container(),
               FlatButton(
-                child: Text("OK"),
+                child: Text("OK",style: TextStyle(color: Colors.green),),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
