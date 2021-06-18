@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/myprofile.dart';
 import 'package:farmers_app/login/login.dart';
 import 'package:farmers_app/user/attendance.dart';
+import 'package:farmers_app/user/inoutlog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -288,6 +289,17 @@ final themeNotifier = Provider.of<ThemeNotifier>(context,listen: false);
                 context,
                 MaterialPageRoute(
                     builder: (context) => Attendance(email,company,name)),
+              )
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.calendar_today_outlined),
+            title: Text('Attendance Report'),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ClockInClockOutLog()),
               )
             },
           ),

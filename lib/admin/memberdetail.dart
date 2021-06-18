@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farmers_app/admin/profile.dart';
+import 'package:farmers_app/admin/ClockInClockOutLoginAdmin.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_boom_menu/flutter_boom_menu.dart';
@@ -93,12 +94,25 @@ class _UserDetailState extends State<MemberDetail> {
         ),
           ),
           MenuItem(
+            child: Icon(Icons.lock_clock, color: Colors.black),
+            title: "Attendance Report",
+            titleColor: Colors.white,
+            subtitle: "Check Clock-in Clock-out Report",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.blue,
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ClockInClockOutLoginAdmin(data['email'])),
+            ),
+          ),
+          MenuItem(
             child: Icon(Icons.bar_chart, color: Colors.black),
             title: "Report",
             titleColor: Colors.white,
             subtitle: "Check Working Hours Report",
             subTitleColor: Colors.white,
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.deepPurpleAccent,
             onTap: () =>  Navigator.push(
               context,
               MaterialPageRoute(
@@ -123,7 +137,7 @@ class _UserDetailState extends State<MemberDetail> {
             titleColor: Colors.white,
             subtitle: "Send Reward",
             subTitleColor: Colors.white,
-            backgroundColor: Colors.deepPurpleAccent,
+            backgroundColor: Colors.teal,
             onTap: () =>  Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AddReward(data['email'],data['company'])),

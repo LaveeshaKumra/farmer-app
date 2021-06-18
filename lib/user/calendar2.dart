@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'inoutlog.dart';
+
 class Calendar2 extends StatefulWidget {
   @override
   _Calendar2State createState() => _Calendar2State();
@@ -150,7 +152,7 @@ class _Calendar2State extends State<Calendar2> {
                 case ConnectionState.done:
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: new Column(
+                    child: new ListView(
                       children: <Widget>[
                         new Row(
                           children: <Widget>[
@@ -366,6 +368,7 @@ class _Calendar2State extends State<Calendar2> {
       //   ),
       // );
     } else {
+
       int eventCount2=0;
       var intime,outtime;
       _userEventSnapshot2.docs.forEach((doc) {
@@ -380,22 +383,27 @@ class _Calendar2State extends State<Calendar2> {
         }
       });
       if(eventCount2>0){
-        return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("${outtime.toDate().difference(intime.toDate()).inHours} Hours"),
-              content: Text("You Worked From ${converttime(intime.toDate()).format(context)} to ${converttime(outtime.toDate()).format(context)}"),
-              actions: [
-                FlatButton(
-                  child: Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
+        // return showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: Text("${outtime.toDate().difference(intime.toDate()).inHours} Hours"),
+        //       content: Text("You Worked From ${converttime(intime.toDate()).format(context)} to ${converttime(outtime.toDate()).format(context)}"),
+        //       actions: [
+        //         FlatButton(
+        //           child: Text("OK"),
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ClockInClockOutLog()),
         );
       }
       else{
@@ -416,7 +424,7 @@ class _Calendar2State extends State<Calendar2> {
           },
         );
       }
-    }
+     }
   }
 
   Widget buildDayEventInfoWidget(int dayNumber) {

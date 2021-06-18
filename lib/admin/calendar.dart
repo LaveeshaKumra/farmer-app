@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chart.dart';
 import 'package:flutter/material.dart';
+import 'ClockInClockOutLoginAdmin.dart';
 
 class Calendar extends StatefulWidget {
   var email;
@@ -153,102 +154,99 @@ class _Calendar2State extends State<Calendar> {
           },
         ),
         body:
-        ListView(
-          children: [
-            new FutureBuilder(
-                future: _getCalendarData(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return new LinearProgressIndicator();
-                    case ConnectionState.done:
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: new Column(
+        new FutureBuilder(
+            future: _getCalendarData(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return new LinearProgressIndicator();
+                case ConnectionState.done:
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new ListView(
+                      children: <Widget>[
+                        new Row(
                           children: <Widget>[
-                            new Row(
-                              children: <Widget>[
-                                new Expanded(
-                                    child: new Text('Sun',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Mon',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Tue',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Wed',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Thr',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Fri',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                                new Expanded(
-                                    child: new Text('Sat',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              //mainAxisSize: MainAxisSize.min,
-                            ),
-                            Container(
-                              // decoration: new BoxDecoration(
-                              //     border: new Border.all(
-                              //         color: Colors.grey)),
-                              child: new GridView.count(
-                                crossAxisCount: numWeekDays,
-                                childAspectRatio: (itemWidth / itemHeight),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: List.generate(
-                                    getNumberOfDaysInMonth(_dateTime.month),
-                                        (index) {
-                                      int dayNumber = index + 1;
-                                      return new GestureDetector(
-                                        // Used for handling tap on each day view
-                                          onTap: () =>
-                                              buildDialog(
-                                                  dayNumber ),
-                                          child: new Container(
-                                              margin: const EdgeInsets.all(2.0),
-                                              padding: const EdgeInsets.all(1.0),
-                                              // decoration: new BoxDecoration(
-                                              //     border: new Border.all(
-                                              //         color: Colors.grey)),
-                                              child: new Column(
-                                                children: <Widget>[
-
-                                                  buildDayNumberWidget(dayNumber),
-                                                  buildattendancecircle(dayNumber),
-                                                  buildDayEventInfoWidget(dayNumber)
-                                                ],
-                                              )));
-                                    }),
-                              ),
-                            )
+                            new Expanded(
+                                child: new Text('Sun',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Mon',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Tue',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Wed',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Thr',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Fri',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
+                            new Expanded(
+                                child: new Text('Sat',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500))),
                           ],
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //mainAxisSize: MainAxisSize.min,
                         ),
-                      );
-                      break;
-                    default:
-                      if (snapshot.hasError)
-                        return new Text('Error: ${snapshot.error}');
-                      else
-                        return new Text('Result: ${snapshot.data}');
-                  }
-                }
-            ),
-          ],
+                        Container(
+                          // decoration: new BoxDecoration(
+                          //     border: new Border.all(
+                          //         color: Colors.grey)),
+                          child: new GridView.count(
+                            crossAxisCount: numWeekDays,
+                            childAspectRatio: (itemWidth / itemHeight),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            children: List.generate(
+                                getNumberOfDaysInMonth(_dateTime.month),
+                                    (index) {
+                                  int dayNumber = index + 1;
+                                  return new GestureDetector(
+                                    // Used for handling tap on each day view
+                                      onTap: () =>
+                                          buildDialog(
+                                              dayNumber ),
+                                      child: new Container(
+                                          margin: const EdgeInsets.all(1.0),
+                                          padding: const EdgeInsets.all(1.0),
+                                          // decoration: new BoxDecoration(
+                                          //     border: new Border.all(
+                                          //         color: Colors.grey)),
+                                          child: new Column(
+                                            children: <Widget>[
+                                              buildDayNumberWidget(dayNumber),
+                                              SizedBox(height: 5),
+                                              buildattendancecircle(dayNumber),
+                                              SizedBox(height: 5),
+                                              buildDayEventInfoWidget(dayNumber)
+                                            ],
+                                          )));
+                                }),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                  break;
+                default:
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  else
+                    return new Text('Result: ${snapshot.data}');
+              }
+            }
         )
     );
   }
@@ -336,7 +334,9 @@ class _Calendar2State extends State<Calendar> {
   _reject(id) async {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("timeoff").doc(id).update({'status':'Rejected'}).then((value) {
-      Navigator.pop(context,true);
+      Navigator.pop(context);
+      Navigator.pop(context);
+
     });
 
   }
@@ -344,7 +344,18 @@ class _Calendar2State extends State<Calendar> {
   _accept(id) async {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("timeoff").doc(id).update({'status':'Accepted'}).then((value) {
-      Navigator.pop(context,true);
+      Navigator.pop(context);
+      Navigator.pop(context);
+
+    });
+  }
+
+  _reset(id) async {
+    final databaseReference = FirebaseFirestore.instance;
+    await databaseReference.collection("timeoff").doc(id).update({'status':'Pending'}).then((value) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+
     });
   }
   converttime(t) {
@@ -359,7 +370,7 @@ class _Calendar2State extends State<Calendar> {
     _userEventSnapshot.docs.forEach((doc) {
       eventDate = doc.data()['start_date'].toDate();
       eventDate2= doc.data()['end_date'].toDate();
-      docid=doc.id;
+
       if (eventDate != null
           && eventDate.day <= dayNumber - _beginMonthPadding && eventDate2.day >= dayNumber - _beginMonthPadding
           && eventDate.month == _dateTime.month
@@ -368,30 +379,41 @@ class _Calendar2State extends State<Calendar> {
         eventtitle=doc.data()['title'];
         eventdesc=doc.data()['description'];
         eventstatus=doc.data()['status'];
+        docid=doc.id;
       }
     });
 
     if (eventCount > 0) {
      if(eventstatus=="Pending"){
+       print(docid);
+
        return showDialog(
          context: context,
          builder: (BuildContext context) {
            return AlertDialog(
-             title: Text("Approve/Deny Request From TimeOff Request Page"),
-             content: Text("$eventtitle\nStatus : $eventstatus"),
+             title: Text("$eventtitle"),
+           content: Text("Status : $eventstatus"),
              actions: [
                FlatButton(
-                 child: Text("OK"),
+                 child: Text("Reject",style: TextStyle(color: Colors.red)),
                  onPressed: () {
-                   Navigator.of(context).pop();
+                   _reject(docid);
                  },
                ),
+               FlatButton(
+                 child: Text("Accept"),
+                 onPressed: () {
+                   _accept(docid);
+                 },
+               ),
+
              ],
            );
          },
        );
      }
      else {
+       print(docid);
        return showDialog(
          context: context,
          builder: (BuildContext context) {
@@ -399,13 +421,18 @@ class _Calendar2State extends State<Calendar> {
              title: Text("$eventtitle"),
              content: Text("$eventdesc\nStatus : $eventstatus"),
              actions: [
-
+               FlatButton(
+                 child: Text("Reset Status",style: TextStyle(color: Colors.red),),
+                 onPressed: () {
+                   _reset(docid);                 },
+               ),
                FlatButton(
                  child: Text("OK"),
                  onPressed: () {
                    Navigator.of(context).pop();
                  },
                ),
+
              ],
            );
          },
@@ -427,22 +454,27 @@ class _Calendar2State extends State<Calendar> {
         }
       });
       if(eventCount2>0){
-        return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("${outtime.toDate().difference(intime.toDate()).inHours} Hours"),
-              content: Text("You Worked From ${converttime(intime.toDate()).format(context)} to ${converttime(outtime.toDate()).format(context)}"),
-              actions: [
-                FlatButton(
-                  child: Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
+        // return showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: Text("${outtime.toDate().difference(intime.toDate()).inHours} Hours"),
+        //       content: Text("You Worked From ${converttime(intime.toDate()).format(context)} to ${converttime(outtime.toDate()).format(context)}"),
+        //       actions: [
+        //         FlatButton(
+        //           child: Text("OK"),
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ClockInClockOutLoginAdmin(email)),
         );
       }
       else{

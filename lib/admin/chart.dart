@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
+import 'ClockInClockOutLoginAdmin.dart';
 
 class UserReportChart extends StatefulWidget {
   var email;
@@ -132,6 +133,15 @@ class _ReportPageState extends State<UserReportChart> {
   Widget _buildChart(BuildContext context, List<Data> saledata) {
     mydata = saledata;
     _generateData(mydata);
+    _onSelectionChanged(charts.SelectionModel model) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ClockInClockOutLoginAdmin(email)),
+      );
+    }
+
+
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
@@ -142,6 +152,11 @@ class _ReportPageState extends State<UserReportChart> {
             animate: true,
             //vertical: true,
             animationDuration: Duration(seconds:1),
+            selectionModels: [
+              new charts.SelectionModelConfig(
+                changedListener: _onSelectionChanged,
+              )
+            ],
           ),
         ),
       ),

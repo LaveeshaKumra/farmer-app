@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
 
+import 'inoutlog.dart';
+
 class ReportPage extends StatefulWidget {
   var email;
   ReportPage(e){this.email=e;}
@@ -97,6 +99,14 @@ class _ReportPageState extends State<ReportPage> {
   Widget _buildChart(BuildContext context, List<Data> saledata) {
     mydata = saledata;
     _generateData(mydata);
+    _onSelectionChanged(charts.SelectionModel model) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ClockInClockOutLog()),
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
@@ -107,6 +117,11 @@ class _ReportPageState extends State<ReportPage> {
             animate: true,
             //vertical: true,
             animationDuration: Duration(seconds:1),
+            selectionModels: [
+              new charts.SelectionModelConfig(
+                changedListener: _onSelectionChanged,
+              )
+            ],
           ),
         ),
       ),
