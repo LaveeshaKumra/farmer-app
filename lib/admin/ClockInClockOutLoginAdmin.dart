@@ -105,7 +105,7 @@ class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
                         ),
                         trailing: document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes<60?
                         Text("${document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes} Mins",style: TextStyle(fontSize: 16,color: Colors.green),):
-                        Text("${document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes/60} Hrs",style: TextStyle(fontSize: 16,color: Colors.green)),
+                        Text("${(document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes/60).toStringAsFixed(2)} Hrs",style: TextStyle(fontSize: 16,color: Colors.green)),
                       ),
                       onTap: () {
 
