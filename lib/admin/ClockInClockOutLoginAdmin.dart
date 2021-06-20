@@ -3,17 +3,21 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
-
 class ClockInClockOutLoginAdmin extends StatefulWidget {
   var email;
-  ClockInClockOutLoginAdmin(e){this.email=e;}
+  ClockInClockOutLoginAdmin(e) {
+    this.email = e;
+  }
   @override
-  _ClockInClockOutLoginAdminState createState() => _ClockInClockOutLoginAdminState(this.email);
+  _ClockInClockOutLoginAdminState createState() =>
+      _ClockInClockOutLoginAdminState(this.email);
 }
 
 class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
   var email;
-  _ClockInClockOutLoginAdminState(e){this.email=e;}
+  _ClockInClockOutLoginAdminState(e) {
+    this.email = e;
+  }
 
   _convertdate(d) {
     final DateFormat formatter = DateFormat('dd MMMM yy');
@@ -26,6 +30,7 @@ class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
     final String formatted = formatter.format(d);
     return formatted;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +40,8 @@ class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("attendance")
-              .where("email", isEqualTo: email).where("out_time",isNotEqualTo: "")
+              .where("email", isEqualTo: email)
+              .where("out_time", isNotEqualTo: "")
               .orderBy('out_time', descending: true)
               .snapshots(),
           builder:
@@ -79,37 +85,56 @@ class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
                 elements: snapshot.data.docs,
                 groupBy: (element) => _convertdate(element['in_time'].toDate()),
                 groupHeaderBuilder: (element) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                      child: Text(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                          child: Text(
                         _convertdate(element['in_time'].toDate()),
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 18,
                             color: Theme.of(context).primaryColor),
                       )),
-                ),
+                    ),
                 indexedItemBuilder: (context, document, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
                       child: ListTile(
-                        leading: Icon(Icons.lock_clock,color: Colors.green,),
-                        title:
-                        Row(
+                        leading: Icon(
+                          Icons.lock_clock,
+                          color: Colors.green,
+                        ),
+                        title: Row(
                           children: [
-                            Text("${_convertdatetime(document.data()['in_time'].toDate())}",style: TextStyle(fontWeight: FontWeight.w500),),
+                            Text(
+                              "${_convertdatetime(document.data()['in_time'].toDate())}",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
                             Text("\t to \t"),
-                            Text("${_convertdatetime(document.data()['out_time'].toDate())}",style: TextStyle(fontWeight: FontWeight.w500),),
+                            Text(
+                              "${_convertdatetime(document.data()['out_time'].toDate())}",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
                           ],
                         ),
-                        trailing: document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes<60?
-                        Text("${document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes} Mins",style: TextStyle(fontSize: 16,color: Colors.green),):
-                        Text("${(document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes/60).toStringAsFixed(2)} Hrs",style: TextStyle(fontSize: 16,color: Colors.green)),
+                        trailing: document
+                                    .data()['out_time']
+                                    .toDate()
+                                    .difference(
+                                        document.data()['in_time'].toDate())
+                                    .inMinutes <
+                                60
+                            ? Text(
+                                "${document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes} Mins",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.green),
+                              )
+                            : Text(
+                                "${(document.data()['out_time'].toDate().difference(document.data()['in_time'].toDate()).inMinutes / 60).toStringAsFixed(2)} Hrs",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.green)),
                       ),
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                     ),
                   );
                 });
@@ -117,5 +142,3 @@ class _ClockInClockOutLoginAdminState extends State<ClockInClockOutLoginAdmin> {
         ));
   }
 }
-
-

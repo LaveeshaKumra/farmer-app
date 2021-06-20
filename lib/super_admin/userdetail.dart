@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farmers_app/admin/ClockInClockOutLoginAdmin.dart';
 import 'package:farmers_app/admin/addreward.dart';
 import 'package:farmers_app/admin/calendar.dart';
 import 'package:farmers_app/admin/chart.dart';
@@ -89,6 +90,19 @@ class _UserDetailState extends State<UserDetail> {
               context,
               MaterialPageRoute(
                   builder: (context) => Calendar(data['email'])),
+            ),
+          ),
+          MenuItem(
+            child: Icon(Icons.lock_clock, color: Colors.black),
+            title: "Attendance Report",
+            titleColor: Colors.white,
+            subtitle: "Check Clock-in Clock-out Report",
+            subTitleColor: Colors.white,
+            backgroundColor: Colors.amber[800],
+            onTap: () =>  Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ClockInClockOutLoginAdmin(data['email'])),
             ),
           ),
           MenuItem(

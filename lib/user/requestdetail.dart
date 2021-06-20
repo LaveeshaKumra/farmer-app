@@ -25,14 +25,37 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
     return formatted;
   }
 
-  _deletereq() async {
+  _deletereq(context) async {
     final databaseReference = FirebaseFirestore.instance;
     await databaseReference.collection("timeoff").doc(docid).delete().then((value) {
       Navigator.pop(context,true);
+      Navigator.pop(context,true);
+
     });
 
   }
-
+  Future<bool> _onBackPressed(context) {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Want to Delete this Leave Request?'),
+        content: new Text('This will be permanently deleted.'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () => _deletereq(context),
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
   // _accept() async {
   //   final databaseReference = FirebaseFirestore.instance;
   //   await databaseReference.collection("timeoff").doc(docid).update({'status':'Accepted'}).then((value) {
@@ -46,7 +69,7 @@ class _TimeOffRequestPageState extends State<RequestDetail> {
         title: Text("Leave Details"),
         actions: [
           data['start_date'].toDate().isAfter(DateTime.now())?GestureDetector(
-            onTap: (){_deletereq();},
+            onTap: (){_onBackPressed(context);},
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.delete),

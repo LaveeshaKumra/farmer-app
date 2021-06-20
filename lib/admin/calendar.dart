@@ -37,7 +37,7 @@ class _Calendar2State extends State<Calendar> {
           .collection('attendance')
       //.where(
       // 'start_date', isGreaterThanOrEqualTo: new DateTime(_dateTime.year, _dateTime.month))
-          .where('email', isEqualTo: email)
+          .where('email', isEqualTo: email).where('out_time', isNotEqualTo: "")
           .get();
       _userEventSnapshot2=userEvents2;
       _userEventSnapshot = userEvents;
